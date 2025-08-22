@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Velorie.pl – E-commerce dla serwerów Minecraft</title>
+    <meta name="description" content="Platforma e-commerce dla właścicieli serwerów Minecraft. Zakładaj sklepy, sprzedawaj itemy, zarządzaj płatnościami. Prosto, szybko, bezpiecznie.">
+    <meta name="keywords" content="minecraft, sklep minecraft, item shop, serwer minecraft, płatności minecraft, ecommerce minecraft, velorie">
+    <meta name="theme-color" content="#0a1030">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script type="application/ld+json" id="schema-json"></script>
+
+    <style>
+        /* Dodatkowe style */
+        :root {
+            --accent: #ff0354;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #00010f; /* Fallback */
+            background-image: radial-gradient(1200px 600px at 80% -10%, #0a1030 0%, #050919 35%, #00010f 65%, #000000 100%);
+        }
+
+        /* Klasy pomocnicze do animacji wjazdu */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Stylizacja paska przewijania */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 999px; }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.08); }
+
+        /* Animacja dla cząsteczek tła */
+        @keyframes particle-animation {
+            0%, 100% {
+                transform: translateY(0%) translateX(0%) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10%) translateX(5%) rotate(20deg);
+            }
+        }
+
+        .particle {
+            animation-name: particle-animation;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        /* Animacja głębi dla tabletu */
+        .perspective-container {
+            perspective: 1500px;
+        }
+
+        @keyframes subtle-3d-rotate {
+            0%, 100% {
+                transform: rotateX(5deg) rotateY(-8deg);
+            }
+            50% {
+                transform: rotateX(-5deg) rotateY(8deg);
+            }
+        }
+
+        #device-mockup {
+            transform-style: preserve-3d;
+            animation: subtle-3d-rotate 15s ease-in-out infinite;
+            transform: rotateX(5deg) rotateY(-8deg); /* Stan początkowy */
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white selection:bg-[#ff0354]/40 selection:text-white">
+
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
+        <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imgur.com/ikYb7tH.png" alt="logo" class="h-10 w-10 rounded-xl ring-1 ring-white/10">
+                <div class="leading-tight">
+                    <div class="text-lg font-semibold tracking-tight">Velorie.pl</div>
+                    <div class="text-xs text-white/60">Platforma E-commerce</div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="./mclista.html" class="hidden sm:inline-flex items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition">
+                    <i data-lucide="list" class="h-4 w-4"></i>
+                    <span>Mclist</span>
+                </a>
+                <button id="lang-switcher" class="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+                    <i data-lucide="languages" class="h-4 w-4"></i>
+                    <span data-translate="lang"></span>
+                    <span class="opacity-60 group-hover:opacity-100 hidden sm:inline">· <span data-translate="langAlt"></span></span>
+                </button>
+                <a href="register.html" class="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 font-medium hover:brightness-110 transition shadow-[0_10px_30px_rgba(255,3,84,0.35)]">
+                    <i data-lucide="fingerprint" class="h-4 w-4"></i>
+                    <span data-translate="login"></span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="relative overflow-hidden">
+            <div id="particles-container" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
+            <div class="mx-auto max-w-7xl px-4 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
+                <div id="hero-text" class="space-y-6">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                        <i data-lucide="sparkles" class="h-3 w-3"></i> <span data-translate="heroKicker"></span>
+                    </span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
+                        <span class="block" data-translate="heroTitleLine1"></span>
+                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60" data-translate="heroTitleLine2"></span>
+                    </h1>
+                    <p class="max-w-xl text-white/70" data-translate="heroDescription"></p>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <a href="#plans" class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+                            <i data-lucide="rocket" class="h-4 w-4"></i> <span data-translate="heroCtaPrimary"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="animate-on-scroll perspective-container">
+                    <div id="device-mockup" class="relative mx-auto w-full max-w-2xl">
+                        <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,3,84,0.35),transparent,rgba(79,70,229,0.35),transparent)] blur-2xl"></div>
+                        <div class="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] p-3 rounded-[2rem]">
+                            <div class="rounded-[1.5rem] border border-white/10 bg-black/60 p-3">
+                                <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 aspect-video overflow-hidden ring-1 ring-white/10">
+                                    <img src="https://i.imgur.com/WbnTEsH.png" alt="Podgląd aplikacji Velorie.pl" class="h-full w-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-center gap-2 text-xs text-white/60">
+                            <i data-lucide="award" class="h-3.5 w-3.5"></i>
+                            <span data-translate="heroImageCaption"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="statystyki" class="relative py-16">
+            <div class="mx-auto max-w-7xl px-4">
+                <h2 class="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="trending-up" class="h-6 w-6 text-[var(--accent)]"></i>
+                    <span data-translate="statsTitle"></span>
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section id="pakiety" class="relative py-20">
+            <div class="mx-auto max-w-7xl px-4">
+                <h2 class="text-3xl md:text-4xl font-black mb-2" data-translate="plansTitle"></h2>
+                <p class="text-white/60 mb-10 max-w-2xl" data-translate="plansDescription"></p>
+                <div class="grid md:grid-cols-3 gap-6" id="plans-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section id="wyroznia" class="relative py-20">
+            <div class="mx-auto max-w-7xl px-4">
+                <h2 class="text-3xl md:text-4xl font-black mb-8" data-translate="featuresTitle"></h2>
+                <div class="overflow-hidden rounded-2xl border border-white/10">
+                    <table class="w-full text-left">
+                        <thead class="bg-white/5">
+                            <tr class="text-sm text-white/70">
+                                <th class="p-4">#</th>
+                                <th class="p-4" data-translate="featuresHeaderFeature"></th>
+                                <th class="p-4" data-translate="featuresHeaderDesc"></th>
+                                <th class="p-4" data-translate="featuresHeaderStatus"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="features-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer id="kontakt" class="relative border-t border-white/10">
+            <div class="mx-auto max-w-7xl px-4 py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img src="https://i.imgur.com/ikYb7tH.png" alt="logo" class="h-10 w-10 rounded-xl ring-1 ring-white/10">
+                        <div>
+                            <div class="font-bold">Velorie.pl</div>
+                            <div class="text-xs text-white/60">© <span id="footer-year"></span> · <span data-translate="footerAllRights"></span></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-white/70" data-translate="footerDescription"></p>
+                    <div class="flex items-center gap-3">
+                        <a aria-label="Discord" href="#discord" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs hover:bg-white/10">Discord</a>
+                        <a aria-label="Facebook" href="#facebook" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs hover:bg-white/10">Fanpage</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-semibold mb-3" data-translate="footerNav"></div>
+                    <ul class="space-y-2 text-sm text-white/70" id="footer-nav-list">
+                         </ul>
+                </div>
+
+                <div>
+                    <div class="font-semibold mb-3" data-translate="footerPayments"></div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Stripe</span>
+                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">PayPal</span>
+                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">BLIK</span>
+                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Przelewy24</span>
+                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Apple Pay</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-semibold mb-3" data-translate="footerCtaTitle"></div>
+                    <p class="text-sm text-white/70 mb-4" data-translate="footerCtaDesc"></p>
+                    <a href="#signup" class="w-full justify-center inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+                        <span data-translate="footerCtaButton"></span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ▼ ZMIENNE I KONFIGURACJA ▼
+            const ACCENT = "#ff0354";
+            let currentLang = 'pl';
+
+            const translations = {
+                 pl: {
+                    metaTitle: "Velorie.pl – E-commerce dla serwerów Minecraft",
+                    metaDesc: "Platforma e-commerce Velorie.pl dla właścicieli serwerów Minecraft. Zakładaj sklepy, sprzedawaj itemy, zarządzaj płatnościami. Prosto, szybko, bezpiecznie.",
+                    heroKicker: "Platforma e-commerce dla Minecraft",
+                    heroTitleLine1: "Rozpocznij swój biznes",
+                    heroTitleLine2: "online już teraz",
+                    heroDescription: "W kilka minut uruchomisz własny sklep z itemami na serwer Minecraft. Integracje płatności, automatyczne komendy i pełna analityka.",
+                    heroCtaPrimary: "Załóż sklep",
+                    heroImageCaption: "Platforma nr 1 na rynku",
+                    login: "Zaloguj",
+                    lang: "PL",
+                    langAlt: "EN",
+                    statsTitle: "Statystyki społeczności",
+                    statAccounts: "Założone konta",
+                    statClients: "Klienci",
+                    statStores: "Sklepy",
+                    statTurnover: "Łączny obrót",
+                    plansTitle: "Pakiety",
+                    plansDescription: "Wybierz plan, który pasuje do Twojego serwera. Możesz zacząć za darmo i skalować bez ograniczeń.",
+                    planForGrowing: "Dla rozwijających się",
+                    planMostPopular: "Najpopularniejszy",
+                    planChoose: "Wybieram",
+                    featuresTitle: "Co nas wyróżnia",
+                    featuresHeaderFeature: "Funkcja",
+                    featuresHeaderDesc: "Opis",
+                    featuresHeaderStatus: "Status",
+                    premiumUX: "Premium UX",
+                    footerDescription: "Platforma e-commerce Velorie.pl dla Twojego serwera.",
+                    footerAllRights: "Wszelkie prawa zastrzeżone.",
+                    footerNav: "Nawigacja",
+                    footerContact: "Kontakt",
+                    footerPayments: "Operatorzy płatności",
+                    footerCtaTitle: "Gotowy na start?",
+                    footerCtaDesc: "Załóż darmowe konto i uruchom swój sklep w kilka minut.",
+                    footerCtaButton: "Rozpocznij teraz",
+                    sectionIds: { stats: "statystyki", plans: "pakiety", features: "wyroznia", contact: "kontakt" },
+                },
+                en: {
+                    metaTitle: "Velorie.pl – E-commerce for Minecraft servers",
+                    metaDesc: "The Velorie.pl e-commerce platform for Minecraft server owners. Create stores, sell items, manage payments. Simple, fast, secure.",
+                    heroKicker: "E-commerce platform for Minecraft",
+                    heroTitleLine1: "Start your business",
+                    heroTitleLine2: "online right now",
+                    heroDescription: "Launch your own in-game item shop for your Minecraft server in minutes. Payment integrations, automatic commands and full analytics.",
+                    heroCtaPrimary: "Create a store",
+                    heroImageCaption: "#1 Platform on the market",
+                    login: "Sign in",
+                    lang: "EN",
+                    langAlt: "PL",
+                    statsTitle: "Community stats",
+                    statAccounts: "Accounts",
+                    statClients: "Clients",
+                    statStores: "Stores",
+                    statTurnover: "Total turnover",
+                    plansTitle: "Plans",
+                    plansDescription: "Pick a plan that fits your server. Start free and scale without limits.",
+                    planForGrowing: "For growing servers",
+                    planMostPopular: "Most popular",
+                    planChoose: "Choose",
+                    featuresTitle: "What makes us different",
+                    featuresHeaderFeature: "Feature",
+                    featuresHeaderDesc: "Description",
+                    featuresHeaderStatus: "Status",
+                    premiumUX: "Premium UX",
+                    footerDescription: "The Velorie.pl e-commerce platform for your server.",
+                    footerAllRights: "All rights reserved.",
+                    footerNav: "Navigation",
+                    footerContact: "Contact",
+                    footerPayments: "Payment providers",
+                    footerCtaTitle: "Ready to launch?",
+                    footerCtaDesc: "Create a free account and launch your shop in minutes.",
+                    footerCtaButton: "Start now",
+                    sectionIds: { stats: "stats", plans: "plans", features: "features", contact: "contact" },
+                },
+            };
+            
+            // Dane dla dynamicznych sekcji
+            const statsData = [
+                { id: 'accounts', icon: 'users', key: 'statAccounts', value: 12840 },
+                { id: 'clients', icon: 'wallet', key: 'statClients', value: 96420 },
+                { id: 'stores', icon: 'store', key: 'statStores', value: 1540 },
+                { id: 'turnover', icon: 'trending-up', key: 'statTurnover', value: 2350000 },
+            ];
+
+            const plansData = {
+                pl: [
+                    { name: "Standard", price: "0 zł / miesięcznie", popular: false, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer"] },
+                    { name: "Premium", price: "39.99 zł / miesięcznie", popular: true, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer", "Analityka i raporty"] },
+                    { name: "Biznes", price: "75.49 zł / miesięcznie", popular: false, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer", "Analityka i raporty", "Wsparcie 24/7 (priorytet w wyższych planach)"] },
+                ],
+                en: [
+                    { name: "Standard", price: "$0 / month", popular: false, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery"] },
+                    { name: "Premium", price: "$39.99 / month", popular: true, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery", "Analytics & reports"] },
+                    { name: "Business", price: "$75.49 / month", popular: false, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery", "Analytics & reports", "24/7 support (priority on higher tiers)"] },
+                ]
+            };
+
+            const featuresData = {
+                pl: [
+                    { title: "Bezpieczeństwo klasy enterprise", desc: "Szyfrowanie, webhooks z podpisem, antyfraud." },
+                    { title: "Next-gen UX i wydajność", desc: "Szybkie ładowanie, PWA, optymalizacja SEO." },
+                    { title: "Automatyzacja komend", desc: "Komendy RCON/Plugin po udanej płatności." },
+                    { title: "Skalowalność", desc: "Od małych serwerów po duże sieci." },
+                    { title: "Personalizacja", desc: "Motywy, komponenty UI, własny domenowy brand." },
+                    { title: "Wsparcie i dokumentacja", desc: "Przewodniki, Discord, gotowe integracje." },
+                ],
+                en: [
+                    { title: "Enterprise-grade security", desc: "Encryption, signed webhooks, antifraud." },
+                    { title: "Next-gen UX & performance", desc: "Fast loads, PWA, SEO optimization." },
+                    { title: "Command automation", desc: "RCON/Plugin commands after payment." },
+                    { title: "Scalability", desc: "From small servers to big networks." },
+                    { title: "Customization", desc: "Themes, UI components, custom domain brand." },
+                    { title: "Support & docs", desc: "Guides, Discord, ready-made integrations." },
+                ]
+            };
+
+
+            // ▼ GŁÓWNA LOGIKA APLIKACJI ▼
+
+            // --- Tłumaczenia i dynamiczna treść ---
+            const updateContent = () => {
+                const t = translations[currentLang];
+
+                // Aktualizacja tekstów na stronie
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.dataset.translate;
+                    if (t[key]) {
+                        el.textContent = t[key];
+                    }
+                });
+                
+                // Aktualizacja metadanych
+                document.title = t.metaTitle;
+                document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+
+                // Aktualizacja JSON-LD
+                const schema = { "@context": "https://schema.org", "@type": "WebSite", name: t.metaTitle, url: window.location.href, inLanguage: currentLang.toUpperCase() };
+                document.getElementById('schema-json').textContent = JSON.stringify(schema);
+                
+                // Aktualizacja sekcji ID i linków
+                document.getElementById('statystyki').id = t.sectionIds.stats;
+                document.getElementById('pakiety').id = t.sectionIds.plans;
+                document.getElementById('wyroznia').id = t.sectionIds.features;
+                document.getElementById('kontakt').id = t.sectionIds.contact;
+                
+                // Dynamiczne renderowanie sekcji
+                renderStats();
+                renderPlans();
+                renderFeatures();
+                renderFooterNav();
+            };
+
+            const switchLang = () => {
+                currentLang = currentLang === 'pl' ? 'en' : 'pl';
+                document.documentElement.lang = currentLang;
+                updateContent();
+            };
+            
+            document.getElementById('lang-switcher').addEventListener('click', switchLang);
+
+            // --- Generowanie dynamicznych sekcji ---
+            
+            const renderStats = () => {
+                const container = document.getElementById('stats-grid');
+                container.innerHTML = '';
+                const t = translations[currentLang];
+                statsData.forEach(stat => {
+                    const card = document.createElement('div');
+                    card.className = 'p-5 text-center relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] animate-on-scroll';
+                    card.innerHTML = `
+                        <div class="flex items-center justify-center gap-2">
+                            <i data-lucide="${stat.icon}" class="h-5 w-5 text-[var(--accent)]"></i>
+                            <span class="text-xs uppercase tracking-wider text-white/60">${t[stat.key]}</span>
+                        </div>
+                        <div id="stat-${stat.id}" class="mt-2 text-2xl md:text-3xl font-extrabold tabular-nums">0</div>
+                    `;
+                    container.appendChild(card);
+                });
+                lucide.createIcons();
+                initScrollAnimations(); // Ponowna inicjalizacja, aby obserwować nowe elementy
+            };
+            
+            const renderPlans = () => {
+                const container = document.getElementById('plans-grid');
+                container.innerHTML = '';
+                const t = translations[currentLang];
+                const currentPlans = plansData[currentLang];
+                currentPlans.forEach((plan, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'animate-on-scroll';
+                    card.style.transitionDelay = `${idx * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="p-6 h-full flex flex-col relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] ${plan.popular ? 'ring-2 ring-[var(--accent)]' : ''}">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <div class="text-xl font-bold">${plan.name}</div>
+                                    <div class="text-sm text-white/60 mt-1">${t.planForGrowing}</div>
+                                </div>
+                                ${plan.popular ? `<span class="rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">${t.planMostPopular}</span>` : ''}
+                            </div>
+                            <div class="text-3xl font-extrabold mt-5">${plan.price}</div>
+                            <ul class="mt-6 space-y-3 text-sm flex-grow">
+                                ${plan.perks.map(perk => `
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i>
+                                        <span class="text-white/80">${perk}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <div class="mt-6">
+                                <a href="#checkout" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+                                    ${t.planChoose} <i data-lucide="chevron-right" class="h-4 w-4"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+                 lucide.createIcons();
+                 initScrollAnimations();
+            };
+            
+            const renderFeatures = () => {
+                 const tbody = document.getElementById('features-tbody');
+                 tbody.innerHTML = '';
+                 const t = translations[currentLang];
+                 const currentFeatures = featuresData[currentLang];
+                 currentFeatures.forEach((feature, i) => {
+                     const row = document.createElement('tr');
+                     row.className = 'border-t border-white/10 hover:bg-white/5 transition';
+                     row.innerHTML = `
+                         <td class="p-4 align-top text-white/60">${i + 1}</td>
+                         <td class="p-4 align-top font-semibold">${feature.title}</td>
+                         <td class="p-4 align-top text-white/70">${feature.desc}</td>
+                         <td class="p-4 align-top">
+                             <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
+                                 <i data-lucide="star" class="h-3.5 w-3.5"></i> ${t.premiumUX}
+                             </span>
+                         </td>
+                     `;
+                     tbody.appendChild(row);
+                 });
+                 lucide.createIcons();
+            };
+
+            const renderFooterNav = () => {
+                const navList = document.getElementById('footer-nav-list');
+                navList.innerHTML = '';
+                const t = translations[currentLang];
+                const navItems = [
+                    { href: `#${t.sectionIds.stats}`, text: t.statsTitle },
+                    { href: `#${t.sectionIds.plans}`, text: t.plansTitle },
+                    { href: `#${t.sectionIds.features}`, text: t.featuresTitle },
+                    { href: `#${t.sectionIds.contact}`, text: t.footerContact }
+                ];
+                navItems.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${item.href}" class="hover:text-white">${item.text}</a>`;
+                    navList.appendChild(li);
+                });
+            };
+
+            // --- ANIMACJE ---
+            
+            // Animacja licznika
+            const animateCounter = (element, target, duration = 1200) => {
+                let start = null;
+                const step = (timestamp) => {
+                    if (!start) start = timestamp;
+                    const progress = Math.min((timestamp - start) / duration, 1);
+                    const currentValue = Math.floor(progress * target);
+                    element.textContent = currentValue.toLocaleString('pl-PL');
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            };
+
+            // Animacja paralaksy w sekcji Hero
+            const heroText = document.getElementById('hero-text');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                if (scrollY < window.innerHeight) {
+                    heroText.style.transform = `translateY(${scrollY * 0.2}px)`;
+                }
+            });
+
+            // Animacje przy przewijaniu (wjazd elementów)
+            let observer;
+            const initScrollAnimations = () => {
+                if (observer) observer.disconnect();
+                
+                observer = new IntersectionObserver((entries, obs) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+
+                            // Specjalna obsługa dla liczników statystyk
+                            const statId = entry.target.querySelector('[id^="stat-"]');
+                            if (statId) {
+                                const statKey = statId.id.replace('stat-', '');
+                                const stat = statsData.find(s => s.id === statKey);
+                                if (stat) {
+                                     animateCounter(statId, stat.value);
+                                }
+                            }
+                            
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+            };
+            
+            // Generowanie cząsteczek w tle
+            const createParticles = () => {
+                const container = document.getElementById('particles-container');
+                const particleCount = 28;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('span');
+                    const size = 24 + (i % 5) * 12;
+                    particle.className = 'absolute rounded-full opacity-20 blur-2xl particle';
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.background = i % 3 ? ACCENT : "#4f46e5";
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animationDuration = `${10 + (i % 5)}s`;
+                    particle.style.animationDelay = `${i * 0.2}s`;
+                    container.appendChild(particle);
+                }
+            };
+
+            // --- INICJALIZACJA ---
+            const init = () => {
+                document.getElementById('footer-year').textContent = new Date().getFullYear();
+                
+                // Pierwsze renderowanie zawartości
+                updateContent();
+                
+                // Utworzenie ikon
+                lucide.createIcons();
+                
+                // Utworzenie cząsteczek tła
+                createParticles();
+                
+                // Inicjalizacja animacji przy przewijaniu
+                initScrollAnimations();
+            };
+
+            init();
+
+        });
+    </script>
+</body>
+</html>
