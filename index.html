@@ -1,607 +1,695 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Velorie.pl – E-commerce dla serwerów Minecraft</title>
-    <meta name="description" content="Platforma e-commerce dla właścicieli serwerów Minecraft. Zakładaj sklepy, sprzedawaj itemy, zarządzaj płatnościami. Prosto, szybko, bezpiecznie.">
-    <meta name="keywords" content="minecraft, sklep minecraft, item shop, serwer minecraft, płatności minecraft, ecommerce minecraft, velorie">
-    <meta name="theme-color" content="#0a1030">
-    <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <title>Velorie — Tworzymy oprogramowanie i produkty cyfrowe</title>
+  <meta name="description" content="Velorie tworzy oprogramowanie i produkty cyfrowe. Rozwijamy ekosystem usług i narzędzi — m.in. Velorie Market oraz Velorie Design." />
+  <meta name="theme-color" content="#0a1030" />
 
-    <script type="application/ld+json" id="schema-json"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="application/ld+json" id="schema-json"></script>
 
-    <style>
-        /* Dodatkowe style */
-        :root {
-            --accent: #ff0354;
+  <style>
+    :root { --accent:#ff0354; }
+    html { scroll-behavior: smooth; }
+    body{
+      background-color:#00010f;
+      background-image:
+        radial-gradient(1200px 600px at 80% -10%, #0a1030 0%, #050919 35%, #00010f 65%, #000000 100%);
+    }
+
+    /* scroll progress */
+    #scroll-progress{
+      position:fixed; inset:0 0 auto 0; height:2px; width:0%;
+      background:var(--accent); z-index:70;
+      box-shadow: 0 10px 30px rgba(255,3,84,.35);
+    }
+
+    /* animate on scroll */
+    .animate-on-scroll{
+      opacity:0; transform: translateY(22px);
+      transition: opacity .6s ease-out, transform .6s ease-out;
+      will-change: opacity, transform;
+    }
+    .animate-on-scroll.is-visible{ opacity:1; transform: translateY(0); }
+
+    /* particles */
+    @keyframes particle-animation{
+      0%,100%{ transform: translateY(0%) translateX(0%) rotate(0deg); }
+      50%{ transform: translateY(-12%) translateX(6%) rotate(18deg); }
+    }
+    .particle{
+      animation-name: particle-animation;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar{ width:10px; height:10px; }
+    ::-webkit-scrollbar-thumb{ background: var(--accent); border-radius:999px; }
+    ::-webkit-scrollbar-track{ background: rgba(255,255,255,.08); }
+  </style>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: { glow: "0 10px 40px rgba(255,3,84,0.45)" }
         }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: #00010f; /* Fallback */
-            background-image: radial-gradient(1200px 600px at 80% -10%, #0a1030 0%, #050919 35%, #00010f 65%, #000000 100%);
-        }
-
-        /* Klasy pomocnicze do animacji wjazdu */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Stylizacja paska przewijania */
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 999px; }
-        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.08); }
-
-        /* Animacja dla cząsteczek tła */
-        @keyframes particle-animation {
-            0%, 100% {
-                transform: translateY(0%) translateX(0%) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-10%) translateX(5%) rotate(20deg);
-            }
-        }
-
-        .particle {
-            animation-name: particle-animation;
-            animation-timing-function: ease-in-out;
-            animation-iteration-count: infinite;
-        }
-
-        /* Animacja głębi dla tabletu */
-        .perspective-container {
-            perspective: 1500px;
-        }
-
-        @keyframes subtle-3d-rotate {
-            0%, 100% {
-                transform: rotateX(5deg) rotateY(-8deg);
-            }
-            50% {
-                transform: rotateX(-5deg) rotateY(8deg);
-            }
-        }
-
-        #device-mockup {
-            transform-style: preserve-3d;
-            animation: subtle-3d-rotate 15s ease-in-out infinite;
-            transform: rotateX(5deg) rotateY(-8deg); /* Stan początkowy */
-        }
-    </style>
+      }
+    };
+  </script>
 </head>
+
 <body class="min-h-screen text-white selection:bg-[#ff0354]/40 selection:text-white">
+  <div id="scroll-progress" aria-hidden="true"></div>
 
-    <header class="sticky top-0 z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
-        <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <img src="https://i.imgur.com/ikYb7tH.png" alt="logo" class="h-10 w-10 rounded-xl ring-1 ring-white/10">
-                <div class="leading-tight">
-                    <div class="text-lg font-semibold tracking-tight">Velorie.pl</div>
-                    <div class="text-xs text-white/60">Platforma E-commerce</div>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-2">
-                <a href="./mclista.html" class="hidden sm:inline-flex items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition">
-                    <i data-lucide="list" class="h-4 w-4"></i>
-                    <span>Mclist</span>
-                </a>
-                <button id="lang-switcher" class="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-                    <i data-lucide="languages" class="h-4 w-4"></i>
-                    <span data-translate="lang"></span>
-                    <span class="opacity-60 group-hover:opacity-100 hidden sm:inline">· <span data-translate="langAlt"></span></span>
-                </button>
-                <a href="register.html" class="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-4 py-2 font-medium hover:brightness-110 transition shadow-[0_10px_30px_rgba(255,3,84,0.35)]">
-                    <i data-lucide="fingerprint" class="h-4 w-4"></i>
-                    <span data-translate="login"></span>
-                </a>
-            </div>
+  <!-- Header -->
+  <header class="sticky top-0 z-60 backdrop-blur-xl bg-black/20 border-b border-white/10">
+    <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="#hero" class="flex items-center gap-3">
+        <!-- podmień logo jeśli chcesz -->
+        <div class="h-10 w-10 rounded-xl bg-white/5 border border-white/10 grid place-items-center">
+          <i data-lucide="sparkles" class="h-5 w-5 text-[var(--accent)]"></i>
         </div>
-    </header>
+        <div class="leading-tight">
+          <div class="text-lg font-semibold tracking-tight">Velorie</div>
+          <div class="text-xs text-white/60">Ekosystem produktów cyfrowych</div>
+        </div>
+      </a>
 
-    <main>
-        <section id="hero" class="relative overflow-hidden">
-            <div id="particles-container" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
-            <div class="mx-auto max-w-7xl px-4 py-20 md:py-28 grid md:grid-cols-2 gap-10 items-center">
-                <div id="hero-text" class="space-y-6">
-                    <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
-                        <i data-lucide="sparkles" class="h-3 w-3"></i> <span data-translate="heroKicker"></span>
-                    </span>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
-                        <span class="block" data-translate="heroTitleLine1"></span>
-                        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60" data-translate="heroTitleLine2"></span>
-                    </h1>
-                    <p class="max-w-xl text-white/70" data-translate="heroDescription"></p>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <a href="#plans" class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-                            <i data-lucide="rocket" class="h-4 w-4"></i> <span data-translate="heroCtaPrimary"></span>
-                        </a>
-                    </div>
-                </div>
+      <nav class="hidden md:flex items-center gap-1 text-sm text-white/70">
+        <a href="#produkty" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Produkty</a>
+        <a href="#co-robimy" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Co robimy</a>
+        <a href="#wspolpraca" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Współpraca</a>
+        <a href="#kontakt" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Kontakt</a>
+      </nav>
 
-                <div class="animate-on-scroll perspective-container">
-                    <div id="device-mockup" class="relative mx-auto w-full max-w-2xl">
-                        <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,3,84,0.35),transparent,rgba(79,70,229,0.35),transparent)] blur-2xl"></div>
-                        <div class="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] p-3 rounded-[2rem]">
-                            <div class="rounded-[1.5rem] border border-white/10 bg-black/60 p-3">
-                                <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 aspect-video overflow-hidden ring-1 ring-white/10">
-                                    <img src="https://i.imgur.com/WbnTEsH.png" alt="Podgląd aplikacji Velorie.pl" class="h-full w-full object-cover">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex items-center justify-center gap-2 text-xs text-white/60">
-                            <i data-lucide="award" class="h-3.5 w-3.5"></i>
-                            <span data-translate="heroImageCaption"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="flex items-center gap-2">
+        <a href="#kontakt" class="hidden sm:inline-flex items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition">
+          <i data-lucide="mail" class="h-4 w-4"></i>
+          <span>Napisz do nas</span>
+        </a>
 
-        <section id="statystyki" class="relative py-16">
-            <div class="mx-auto max-w-7xl px-4">
-                <h2 class="text-2xl md:text-3xl font-bold mb-8 flex items-center gap-3">
-                    <i data-lucide="trending-up" class="h-6 w-6 text-[var(--accent)]"></i>
-                    <span data-translate="statsTitle"></span>
-                </h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats-grid">
-                    </div>
-            </div>
-        </section>
+        <button id="menuBtn" class="md:hidden inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold hover:bg-white/10 transition" aria-label="Otwórz menu">
+          <i data-lucide="menu" class="h-4 w-4"></i>
+          <span class="hidden xs:inline">Menu</span>
+        </button>
+      </div>
+    </div>
 
-        <section id="pakiety" class="relative py-20">
-            <div class="mx-auto max-w-7xl px-4">
-                <h2 class="text-3xl md:text-4xl font-black mb-2" data-translate="plansTitle"></h2>
-                <p class="text-white/60 mb-10 max-w-2xl" data-translate="plansDescription"></p>
-                <div class="grid md:grid-cols-3 gap-6" id="plans-grid">
-                    </div>
-            </div>
-        </section>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 bg-black/30 backdrop-blur-xl">
+      <div class="mx-auto max-w-7xl px-4 py-3 grid gap-2 text-sm text-white/80">
+        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#produkty">Produkty</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#co-robimy">Co robimy</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#wspolpraca">Współpraca</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#kontakt">Kontakt</a>
+        <div class="h-px bg-white/10 my-1"></div>
+        <a class="rounded-lg px-3 py-2 bg-[var(--accent)] text-white font-semibold hover:brightness-110 transition"
+           href="https://www.market.velorie.pl" target="_blank" rel="noopener">Przejdź do Velorie Market</a>
+        <a class="rounded-lg px-3 py-2 border border-white/10 bg-white/5 hover:bg-white/10 transition"
+           href="https://www.design.velorie.pl" target="_blank" rel="noopener">Przejdź do Velorie Design</a>
+      </div>
+    </div>
+  </header>
 
-        <section id="wyroznia" class="relative py-20">
-            <div class="mx-auto max-w-7xl px-4">
-                <h2 class="text-3xl md:text-4xl font-black mb-8" data-translate="featuresTitle"></h2>
-                <div class="overflow-hidden rounded-2xl border border-white/10">
-                    <table class="w-full text-left">
-                        <thead class="bg-white/5">
-                            <tr class="text-sm text-white/70">
-                                <th class="p-4">#</th>
-                                <th class="p-4" data-translate="featuresHeaderFeature"></th>
-                                <th class="p-4" data-translate="featuresHeaderDesc"></th>
-                                <th class="p-4" data-translate="featuresHeaderStatus"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="features-tbody">
-                            </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+  <main>
+    <!-- Hero -->
+    <section id="hero" class="relative overflow-hidden">
+      <div id="particles" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
 
-        <footer id="kontakt" class="relative border-t border-white/10">
-            <div class="mx-auto max-w-7xl px-4 py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="space-y-4">
-                    <div class="flex items-center gap-3">
-                        <img src="https://i.imgur.com/ikYb7tH.png" alt="logo" class="h-10 w-10 rounded-xl ring-1 ring-white/10">
-                        <div>
-                            <div class="font-bold">Velorie.pl</div>
-                            <div class="text-xs text-white/60">© <span id="footer-year"></span> · <span data-translate="footerAllRights"></span></div>
-                        </div>
-                    </div>
-                    <p class="text-sm text-white/70" data-translate="footerDescription"></p>
-                    <div class="flex items-center gap-3">
-                        <a aria-label="Discord" href="#discord" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs hover:bg-white/10">Discord</a>
-                        <a aria-label="Facebook" href="#facebook" class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs hover:bg-white/10">Fanpage</a>
-                    </div>
-                </div>
+      <div class="mx-auto max-w-7xl px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-10 items-center">
+        <div id="heroText" class="space-y-6">
+          <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+            <i data-lucide="layers" class="h-3 w-3"></i>
+            <span>Velorie = marka parasolowa dla produktów cyfrowych</span>
+          </span>
 
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
+            <span class="block">Tworzymy oprogramowanie</span>
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
+              i budujemy ekosystem produktów Velorie
+            </span>
+          </h1>
+
+          <p class="max-w-xl text-white/70">
+            Działamy jak “suite” produktów: rozwijamy osobne moduły i usługi pod jedną marką.
+            Dostarczamy rozwiązania, które są proste w użyciu, szybkie w wdrożeniu i gotowe do rozwoju.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#produkty"
+               class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+              <i data-lucide="rocket" class="h-4 w-4"></i>
+              <span>Zobacz produkty</span>
+            </a>
+            <a href="#wspolpraca"
+               class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition">
+              <i data-lucide="handshake" class="h-4 w-4"></i>
+              <span>Współpraca</span>
+            </a>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 text-xs text-white/60">
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <i data-lucide="sparkles" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
+              Produkty modułowe
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <i data-lucide="shield" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
+              Stabilność i bezpieczeństwo
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <i data-lucide="zap" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
+              Szybkie iteracje
+            </span>
+          </div>
+        </div>
+
+        <!-- Right hero card -->
+        <div class="animate-on-scroll">
+          <div class="relative rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.45)] p-5">
+            <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,3,84,0.35),transparent,rgba(79,70,229,0.35),transparent)] blur-2xl"></div>
+
+            <div class="rounded-2xl border border-white/10 bg-black/50 p-5">
+              <div class="flex items-center justify-between">
                 <div>
-                    <div class="font-semibold mb-3" data-translate="footerNav"></div>
-                    <ul class="space-y-2 text-sm text-white/70" id="footer-nav-list">
-                         </ul>
+                  <div class="text-xs text-white/60">Velorie</div>
+                  <div class="text-xl font-extrabold mt-1">Produkty pod jedną marką</div>
                 </div>
+                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
+                  <i data-lucide="badge-check" class="h-4 w-4"></i>
+                  Profesjonalnie
+                </span>
+              </div>
 
-                <div>
-                    <div class="font-semibold mb-3" data-translate="footerPayments"></div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Stripe</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">PayPal</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">BLIK</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Przelewy24</span>
-                        <span class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">Apple Pay</span>
-                    </div>
-                </div>
+              <div class="mt-5 grid sm:grid-cols-2 gap-3">
+                <a class="group rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition p-4"
+                   href="https://www.market.velorie.pl" target="_blank" rel="noopener">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="briefcase" class="h-5 w-5 text-[var(--accent)]"></i>
+                    <div class="font-semibold">Velorie Market</div>
+                  </div>
+                  <p class="mt-2 text-sm text-white/70">
+                    Platforma ogłoszeniowa i profile freelancerów.
+                  </p>
+                  <div class="mt-3 text-xs text-white/60 inline-flex items-center gap-2">
+                    <span>Otwórz</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-0.5 transition-transform"></i>
+                  </div>
+                </a>
 
-                <div>
-                    <div class="font-semibold mb-3" data-translate="footerCtaTitle"></div>
-                    <p class="text-sm text-white/70 mb-4" data-translate="footerCtaDesc"></p>
-                    <a href="#signup" class="w-full justify-center inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-                        <span data-translate="footerCtaButton"></span>
-                    </a>
+                <a class="group rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition p-4"
+                   href="https://www.design.velorie.pl" target="_blank" rel="noopener">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="palette" class="h-5 w-5 text-[var(--accent)]"></i>
+                    <div class="font-semibold">Velorie Design</div>
+                  </div>
+                  <p class="mt-2 text-sm text-white/70">
+                    Design, identyfikacja, UI/UX i assets.
+                  </p>
+                  <div class="mt-3 text-xs text-white/60 inline-flex items-center gap-2">
+                    <span>Otwórz</span>
+                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-0.5 transition-transform"></i>
+                  </div>
+                </a>
+              </div>
+
+              <div class="mt-4 rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/65">
+                <div class="flex items-start gap-2">
+                  <i data-lucide="info" class="h-4 w-4 mt-0.5 text-white/70"></i>
+                  <p>
+                    W Velorie rozwijamy też kolejne odnogi (np. Mclist, Itemshop itd.) — ta strona jest centralnym hubem marki.
+                  </p>
                 </div>
+              </div>
             </div>
-        </footer>
-    </main>
+          </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+          <p class="mt-4 text-center text-xs text-white/55">
+            Centralna strona Velorie — linki do produktów i współpracy.
+          </p>
+        </div>
+      </div>
+    </section>
 
-            // ▼ ZMIENNE I KONFIGURACJA ▼
-            const ACCENT = "#ff0354";
-            let currentLang = 'pl';
+    <!-- Produkty -->
+    <section id="produkty" class="relative py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <div class="flex items-end justify-between gap-6 flex-wrap">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-black">Produkty Velorie</h2>
+            <p class="mt-2 text-white/60 max-w-2xl">
+              Każdy produkt ma własny kierunek rozwoju, ale wspólny standard jakości, designu i doświadczenia użytkownika.
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <a href="https://www.market.velorie.pl" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(255,3,84,0.35)]">
+              <i data-lucide="briefcase" class="h-4 w-4"></i>
+              <span>Market</span>
+            </a>
+            <a href="https://www.design.velorie.pl" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold hover:bg-white/10 transition">
+              <i data-lucide="palette" class="h-4 w-4"></i>
+              <span>Design</span>
+            </a>
+          </div>
+        </div>
 
-            const translations = {
-                 pl: {
-                    metaTitle: "Velorie.pl – E-commerce dla serwerów Minecraft",
-                    metaDesc: "Platforma e-commerce Velorie.pl dla właścicieli serwerów Minecraft. Zakładaj sklepy, sprzedawaj itemy, zarządzaj płatnościami. Prosto, szybko, bezpiecznie.",
-                    heroKicker: "Platforma e-commerce dla Minecraft",
-                    heroTitleLine1: "Rozpocznij swój biznes",
-                    heroTitleLine2: "online już teraz",
-                    heroDescription: "W kilka minut uruchomisz własny sklep z itemami na serwer Minecraft. Integracje płatności, automatyczne komendy i pełna analityka.",
-                    heroCtaPrimary: "Załóż sklep",
-                    heroImageCaption: "Platforma nr 1 na rynku",
-                    login: "Zaloguj",
-                    lang: "PL",
-                    langAlt: "EN",
-                    statsTitle: "Statystyki społeczności",
-                    statAccounts: "Założone konta",
-                    statClients: "Klienci",
-                    statStores: "Sklepy",
-                    statTurnover: "Łączny obrót",
-                    plansTitle: "Pakiety",
-                    plansDescription: "Wybierz plan, który pasuje do Twojego serwera. Możesz zacząć za darmo i skalować bez ograniczeń.",
-                    planForGrowing: "Dla rozwijających się",
-                    planMostPopular: "Najpopularniejszy",
-                    planChoose: "Wybieram",
-                    featuresTitle: "Co nas wyróżnia",
-                    featuresHeaderFeature: "Funkcja",
-                    featuresHeaderDesc: "Opis",
-                    featuresHeaderStatus: "Status",
-                    premiumUX: "Premium UX",
-                    footerDescription: "Platforma e-commerce Velorie.pl dla Twojego serwera.",
-                    footerAllRights: "Wszelkie prawa zastrzeżone.",
-                    footerNav: "Nawigacja",
-                    footerContact: "Kontakt",
-                    footerPayments: "Operatorzy płatności",
-                    footerCtaTitle: "Gotowy na start?",
-                    footerCtaDesc: "Załóż darmowe konto i uruchom swój sklep w kilka minut.",
-                    footerCtaButton: "Rozpocznij teraz",
-                    sectionIds: { stats: "statystyki", plans: "pakiety", features: "wyroznia", contact: "kontakt" },
-                },
-                en: {
-                    metaTitle: "Velorie.pl – E-commerce for Minecraft servers",
-                    metaDesc: "The Velorie.pl e-commerce platform for Minecraft server owners. Create stores, sell items, manage payments. Simple, fast, secure.",
-                    heroKicker: "E-commerce platform for Minecraft",
-                    heroTitleLine1: "Start your business",
-                    heroTitleLine2: "online right now",
-                    heroDescription: "Launch your own in-game item shop for your Minecraft server in minutes. Payment integrations, automatic commands and full analytics.",
-                    heroCtaPrimary: "Create a store",
-                    heroImageCaption: "#1 Platform on the market",
-                    login: "Sign in",
-                    lang: "EN",
-                    langAlt: "PL",
-                    statsTitle: "Community stats",
-                    statAccounts: "Accounts",
-                    statClients: "Clients",
-                    statStores: "Stores",
-                    statTurnover: "Total turnover",
-                    plansTitle: "Plans",
-                    plansDescription: "Pick a plan that fits your server. Start free and scale without limits.",
-                    planForGrowing: "For growing servers",
-                    planMostPopular: "Most popular",
-                    planChoose: "Choose",
-                    featuresTitle: "What makes us different",
-                    featuresHeaderFeature: "Feature",
-                    featuresHeaderDesc: "Description",
-                    featuresHeaderStatus: "Status",
-                    premiumUX: "Premium UX",
-                    footerDescription: "The Velorie.pl e-commerce platform for your server.",
-                    footerAllRights: "All rights reserved.",
-                    footerNav: "Navigation",
-                    footerContact: "Contact",
-                    footerPayments: "Payment providers",
-                    footerCtaTitle: "Ready to launch?",
-                    footerCtaDesc: "Create a free account and launch your shop in minutes.",
-                    footerCtaButton: "Start now",
-                    sectionIds: { stats: "stats", plans: "plans", features: "features", contact: "contact" },
-                },
-            };
-            
-            // Dane dla dynamicznych sekcji
-            const statsData = [
-                { id: 'accounts', icon: 'users', key: 'statAccounts', value: 12840 },
-                { id: 'clients', icon: 'wallet', key: 'statClients', value: 96420 },
-                { id: 'stores', icon: 'store', key: 'statStores', value: 1540 },
-                { id: 'turnover', icon: 'trending-up', key: 'statTurnover', value: 2350000 },
-            ];
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="briefcase" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Velorie Market</div>
+                <div class="text-xs text-white/60">Freelancerzy • Ogłoszenia • Profile</div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-white/70">
+              Miejsce do łączenia zleceniodawców i wykonawców. Profile, portfolio i szybki kontakt.
+            </p>
+            <a class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
+               href="https://www.market.velorie.pl" target="_blank" rel="noopener">
+              Otwórz Market <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </a>
+          </div>
 
-            const plansData = {
-                pl: [
-                    { name: "Standard", price: "0 zł / miesięcznie", popular: false, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer"] },
-                    { name: "Premium", price: "39.99 zł / miesięcznie", popular: true, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer", "Analityka i raporty"] },
-                    { name: "Biznes", price: "75.49 zł / miesięcznie", popular: false, perks: ["Nielimitowane produkty", "Integracje płatności (Stripe, PayPal, BLIK, P24)", "Automatyczna wysyłka komend na serwer", "Analityka i raporty", "Wsparcie 24/7 (priorytet w wyższych planach)"] },
-                ],
-                en: [
-                    { name: "Standard", price: "$0 / month", popular: false, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery"] },
-                    { name: "Premium", price: "$39.99 / month", popular: true, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery", "Analytics & reports"] },
-                    { name: "Business", price: "$75.49 / month", popular: false, perks: ["Unlimited products", "Payments (Stripe, PayPal, BLIK, P24)", "Automatic in-game command delivery", "Analytics & reports", "24/7 support (priority on higher tiers)"] },
-                ]
-            };
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="palette" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Velorie Design</div>
+                <div class="text-xs text-white/60">Branding • UI/UX • Grafika</div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-white/70">
+              Projekty graficzne, systemy identyfikacji, UI i materiały pod produkty cyfrowe.
+            </p>
+            <a class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
+               href="https://www.design.velorie.pl" target="_blank" rel="noopener">
+              Otwórz Design <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            </a>
+          </div>
 
-            const featuresData = {
-                pl: [
-                    { title: "Bezpieczeństwo klasy enterprise", desc: "Szyfrowanie, webhooks z podpisem, antyfraud." },
-                    { title: "Next-gen UX i wydajność", desc: "Szybkie ładowanie, PWA, optymalizacja SEO." },
-                    { title: "Automatyzacja komend", desc: "Komendy RCON/Plugin po udanej płatności." },
-                    { title: "Skalowalność", desc: "Od małych serwerów po duże sieci." },
-                    { title: "Personalizacja", desc: "Motywy, komponenty UI, własny domenowy brand." },
-                    { title: "Wsparcie i dokumentacja", desc: "Przewodniki, Discord, gotowe integracje." },
-                ],
-                en: [
-                    { title: "Enterprise-grade security", desc: "Encryption, signed webhooks, antifraud." },
-                    { title: "Next-gen UX & performance", desc: "Fast loads, PWA, SEO optimization." },
-                    { title: "Command automation", desc: "RCON/Plugin commands after payment." },
-                    { title: "Scalability", desc: "From small servers to big networks." },
-                    { title: "Customization", desc: "Themes, UI components, custom domain brand." },
-                    { title: "Support & docs", desc: "Guides, Discord, ready-made integrations." },
-                ]
-            };
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="layers" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Pozostałe odnogi</div>
+                <div class="text-xs text-white/60">Mclist • Itemshop • i więcej</div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-white/70">
+              Rozwijamy kolejne produkty w ramach ekosystemu Velorie. (Tutaj możesz dodać linki, gdy będą gotowe.)
+            </p>
+            <div class="mt-5 text-xs text-white/55 inline-flex items-center gap-2">
+              <i data-lucide="clock" class="h-4 w-4"></i>
+              <span>W przygotowaniu / w rozwoju</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Co robimy -->
+    <section id="co-robimy" class="relative py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-7 space-y-4">
+            <h2 class="text-3xl md:text-4xl font-black">Czym się zajmujemy?</h2>
+            <p class="text-white/70 max-w-2xl">
+              Velorie tworzy oprogramowanie i produkty cyfrowe. Projektujemy doświadczenie, budujemy funkcje,
+              dbamy o performance i iterujemy szybko — tak, żeby produkty realnie rosły.
+            </p>
 
-            // ▼ GŁÓWNA LOGIKA APLIKACJI ▼
+            <div class="grid sm:grid-cols-2 gap-4 pt-4">
+              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="code" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">Development</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">Aplikacje webowe, panele, systemy, automatyzacje i integracje.</p>
+              </div>
 
-            // --- Tłumaczenia i dynamiczna treść ---
-            const updateContent = () => {
-                const t = translations[currentLang];
+              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="layout" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">UI/UX & Design</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">Glass/dark style, design systemy, landing pages i branding.</p>
+              </div>
 
-                // Aktualizacja tekstów na stronie
-                document.querySelectorAll('[data-translate]').forEach(el => {
-                    const key = el.dataset.translate;
-                    if (t[key]) {
-                        el.textContent = t[key];
-                    }
-                });
-                
-                // Aktualizacja metadanych
-                document.title = t.metaTitle;
-                document.querySelector('meta[name="description"]').setAttribute('content', t.metaDesc);
+              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="shield" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">Bezpieczeństwo</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">Podstawy hardeningu, dobre praktyki, kontrola dostępu.</p>
+              </div>
 
-                // Aktualizacja JSON-LD
-                const schema = { "@context": "https://schema.org", "@type": "WebSite", name: t.metaTitle, url: window.location.href, inLanguage: currentLang.toUpperCase() };
-                document.getElementById('schema-json').textContent = JSON.stringify(schema);
-                
-                // Aktualizacja sekcji ID i linków
-                document.getElementById('statystyki').id = t.sectionIds.stats;
-                document.getElementById('pakiety').id = t.sectionIds.plans;
-                document.getElementById('wyroznia').id = t.sectionIds.features;
-                document.getElementById('kontakt').id = t.sectionIds.contact;
-                
-                // Dynamiczne renderowanie sekcji
-                renderStats();
-                renderPlans();
-                renderFeatures();
-                renderFooterNav();
-            };
+              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="trending-up" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">Rozwój produktu</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">Roadmapa, iteracje, testy, wdrożenia i analityka (jeśli potrzebna).</p>
+              </div>
+            </div>
+          </div>
 
-            const switchLang = () => {
-                currentLang = currentLang === 'pl' ? 'en' : 'pl';
-                document.documentElement.lang = currentLang;
-                updateContent();
-            };
-            
-            document.getElementById('lang-switcher').addEventListener('click', switchLang);
+          <div class="lg:col-span-5">
+            <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm text-white/60">Standard</div>
+                  <div class="text-xl font-bold mt-1">Jeden styl, wiele produktów</div>
+                </div>
+                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
+                  <i data-lucide="sparkles" class="h-4 w-4"></i>
+                  Velorie
+                </span>
+              </div>
 
-            // --- Generowanie dynamicznych sekcji ---
-            
-            const renderStats = () => {
-                const container = document.getElementById('stats-grid');
-                container.innerHTML = '';
-                const t = translations[currentLang];
-                statsData.forEach(stat => {
-                    const card = document.createElement('div');
-                    card.className = 'p-5 text-center relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] animate-on-scroll';
-                    card.innerHTML = `
-                        <div class="flex items-center justify-center gap-2">
-                            <i data-lucide="${stat.icon}" class="h-5 w-5 text-[var(--accent)]"></i>
-                            <span class="text-xs uppercase tracking-wider text-white/60">${t[stat.key]}</span>
-                        </div>
-                        <div id="stat-${stat.id}" class="mt-2 text-2xl md:text-3xl font-extrabold tabular-nums">0</div>
-                    `;
-                    container.appendChild(card);
-                });
-                lucide.createIcons();
-                initScrollAnimations(); // Ponowna inicjalizacja, aby obserwować nowe elementy
-            };
-            
-            const renderPlans = () => {
-                const container = document.getElementById('plans-grid');
-                container.innerHTML = '';
-                const t = translations[currentLang];
-                const currentPlans = plansData[currentLang];
-                currentPlans.forEach((plan, idx) => {
-                    const card = document.createElement('div');
-                    card.className = 'animate-on-scroll';
-                    card.style.transitionDelay = `${idx * 0.1}s`;
-                    card.innerHTML = `
-                        <div class="p-6 h-full flex flex-col relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.4)] ${plan.popular ? 'ring-2 ring-[var(--accent)]' : ''}">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <div class="text-xl font-bold">${plan.name}</div>
-                                    <div class="text-sm text-white/60 mt-1">${t.planForGrowing}</div>
-                                </div>
-                                ${plan.popular ? `<span class="rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">${t.planMostPopular}</span>` : ''}
-                            </div>
-                            <div class="text-3xl font-extrabold mt-5">${plan.price}</div>
-                            <ul class="mt-6 space-y-3 text-sm flex-grow">
-                                ${plan.perks.map(perk => `
-                                    <li class="flex items-start gap-2">
-                                        <i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i>
-                                        <span class="text-white/80">${perk}</span>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                            <div class="mt-6">
-                                <a href="#checkout" class="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-                                    ${t.planChoose} <i data-lucide="chevron-right" class="h-4 w-4"></i>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-                 lucide.createIcons();
-                 initScrollAnimations();
-            };
-            
-            const renderFeatures = () => {
-                 const tbody = document.getElementById('features-tbody');
-                 tbody.innerHTML = '';
-                 const t = translations[currentLang];
-                 const currentFeatures = featuresData[currentLang];
-                 currentFeatures.forEach((feature, i) => {
-                     const row = document.createElement('tr');
-                     row.className = 'border-t border-white/10 hover:bg-white/5 transition';
-                     row.innerHTML = `
-                         <td class="p-4 align-top text-white/60">${i + 1}</td>
-                         <td class="p-4 align-top font-semibold">${feature.title}</td>
-                         <td class="p-4 align-top text-white/70">${feature.desc}</td>
-                         <td class="p-4 align-top">
-                             <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
-                                 <i data-lucide="star" class="h-3.5 w-3.5"></i> ${t.premiumUX}
-                             </span>
-                         </td>
-                     `;
-                     tbody.appendChild(row);
-                 });
-                 lucide.createIcons();
-            };
+              <ul class="mt-5 space-y-3 text-sm text-white/75">
+                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Spójny design i UX między produktami</span></li>
+                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Modułowość — rozwój bez chaosu</span></li>
+                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Skalowalny fundament pod kolejne odnogi</span></li>
+                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Wdrożenia i iteracje w krótkich cyklach</span></li>
+              </ul>
 
-            const renderFooterNav = () => {
-                const navList = document.getElementById('footer-nav-list');
-                navList.innerHTML = '';
-                const t = translations[currentLang];
-                const navItems = [
-                    { href: `#${t.sectionIds.stats}`, text: t.statsTitle },
-                    { href: `#${t.sectionIds.plans}`, text: t.plansTitle },
-                    { href: `#${t.sectionIds.features}`, text: t.featuresTitle },
-                    { href: `#${t.sectionIds.contact}`, text: t.footerContact }
-                ];
-                navItems.forEach(item => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="${item.href}" class="hover:text-white">${item.text}</a>`;
-                    navList.appendChild(li);
-                });
-            };
+              <div class="mt-6 rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/65">
+                <div class="flex items-start gap-2">
+                  <i data-lucide="info" class="h-4 w-4 mt-0.5 text-white/70"></i>
+                  <p>Jeśli chcesz, dodam tu realne stack/technologie, liczby (wdrożenia, uptime, users) oraz case studies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            // --- ANIMACJE ---
-            
-            // Animacja licznika
-            const animateCounter = (element, target, duration = 1200) => {
-                let start = null;
-                const step = (timestamp) => {
-                    if (!start) start = timestamp;
-                    const progress = Math.min((timestamp - start) / duration, 1);
-                    const currentValue = Math.floor(progress * target);
-                    element.textContent = currentValue.toLocaleString('pl-PL');
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    }
-                };
-                window.requestAnimationFrame(step);
-            };
+        </div>
+      </div>
+    </section>
 
-            // Animacja paralaksy w sekcji Hero
-            const heroText = document.getElementById('hero-text');
-            window.addEventListener('scroll', () => {
-                const scrollY = window.scrollY;
-                if (scrollY < window.innerHeight) {
-                    heroText.style.transform = `translateY(${scrollY * 0.2}px)`;
-                }
-            });
+    <!-- Współpraca -->
+    <section id="wspolpraca" class="relative py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <h2 class="text-3xl md:text-4xl font-black mb-2">Współpraca</h2>
+        <p class="text-white/60 mb-10 max-w-2xl">
+          Współpracujemy z twórcami, markami i społecznościami. Jeśli masz pomysł na produkt, integrację, partnerstwo
+          albo potrzebujesz wdrożenia — odezwij się.
+        </p>
 
-            // Animacje przy przewijaniu (wjazd elementów)
-            let observer;
-            const initScrollAnimations = () => {
-                if (observer) observer.disconnect();
-                
-                observer = new IntersectionObserver((entries, obs) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="handshake" class="h-5 w-5"></i>
+              </span>
+              <div class="font-bold">Partnerstwa</div>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Cross-promo, integracje, wspólne akcje i rozwój produktów.</p>
+          </div>
 
-                            // Specjalna obsługa dla liczników statystyk
-                            const statId = entry.target.querySelector('[id^="stat-"]');
-                            if (statId) {
-                                const statKey = statId.id.replace('stat-', '');
-                                const stat = statsData.find(s => s.id === statKey);
-                                if (stat) {
-                                     animateCounter(statId, stat.value);
-                                }
-                            }
-                            
-                            obs.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="briefcase-business" class="h-5 w-5"></i>
+              </span>
+              <div class="font-bold">B2B / realizacje</div>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Landing, panel, system, automatyzacja — od MVP po rozwój.</p>
+          </div>
 
-                document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-            };
-            
-            // Generowanie cząsteczek w tle
-            const createParticles = () => {
-                const container = document.getElementById('particles-container');
-                const particleCount = 28;
-                for (let i = 0; i < particleCount; i++) {
-                    const particle = document.createElement('span');
-                    const size = 24 + (i % 5) * 12;
-                    particle.className = 'absolute rounded-full opacity-20 blur-2xl particle';
-                    particle.style.width = `${size}px`;
-                    particle.style.height = `${size}px`;
-                    particle.style.background = i % 3 ? ACCENT : "#4f46e5";
-                    particle.style.left = `${Math.random() * 100}%`;
-                    particle.style.top = `${Math.random() * 100}%`;
-                    particle.style.animationDuration = `${10 + (i % 5)}s`;
-                    particle.style.animationDelay = `${i * 0.2}s`;
-                    container.appendChild(particle);
-                }
-            };
+          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="megaphone" class="h-5 w-5"></i>
+              </span>
+              <div class="font-bold">Wspólny marketing</div>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Promocje produktów Velorie i kampanie w obrębie społeczności.</p>
+          </div>
+        </div>
 
-            // --- INICJALIZACJA ---
-            const init = () => {
-                document.getElementById('footer-year').textContent = new Date().getFullYear();
-                
-                // Pierwsze renderowanie zawartości
-                updateContent();
-                
-                // Utworzenie ikon
-                lucide.createIcons();
-                
-                // Utworzenie cząsteczek tła
-                createParticles();
-                
-                // Inicjalizacja animacji przy przewijaniu
-                initScrollAnimations();
-            };
+        <div class="mt-10 animate-on-scroll rounded-2xl border border-white/10 bg-black/30 p-6">
+          <div class="flex items-start gap-3">
+            <i data-lucide="workflow" class="h-5 w-5 text-[var(--accent)] mt-0.5"></i>
+            <div>
+              <div class="font-semibold">Jak wygląda start?</div>
+              <p class="text-sm text-white/70 mt-1">
+                1) Krótka wiadomość → 2) ustalenie celu i zakresu → 3) propozycja planu → 4) wdrożenie / iteracje.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            init();
+    <!-- Kontakt -->
+    <section id="kontakt" class="relative py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-6 space-y-4">
+            <h2 class="text-3xl md:text-4xl font-black">Kontakt</h2>
+            <p class="text-white/70 max-w-xl">
+              Napisz, z czym startujesz. Odpowiadamy szybko i konkretnie.
+              (Wstaw tu swoje realne kanały: Discord / e-mail / social.)
+            </p>
 
+            <div class="grid sm:grid-cols-2 gap-4 pt-2">
+              <a href="mailto:kontakt@velorie.pl"
+                 class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 transition">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="mail" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">E-mail</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">kontakt@velorie.pl <span class="text-white/40">(podmień)</span></p>
+              </a>
+
+              <a href="#"
+                 class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 transition">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="message-circle" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">Discord</div>
+                </div>
+                <p class="mt-2 text-sm text-white/70">Link do serwera <span class="text-white/40">(wstaw)</span></p>
+              </a>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6">
+            <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+              <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <div class="text-sm text-white/60">Formularz</div>
+                  <div class="text-xl font-bold mt-1">Opisz temat w 60 sekund</div>
+                </div>
+                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
+                  <i data-lucide="sparkles" class="h-4 w-4"></i>
+                  Velorie
+                </span>
+              </div>
+
+              <!-- demo form (podmień na własny backend / FormSubmit itp.) -->
+              <form class="mt-5 grid gap-3" onsubmit="return window.VelorieDemoForm.submit(event)">
+                <div class="grid sm:grid-cols-2 gap-3">
+                  <label class="grid gap-1 text-sm">
+                    <span class="text-white/70">Imię / nick</span>
+                    <input required class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
+                           placeholder="np. zxq" />
+                  </label>
+                  <label class="grid gap-1 text-sm">
+                    <span class="text-white/70">Kontakt (mail / discord)</span>
+                    <input required class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
+                           placeholder="np. mail@… / @nick" />
+                  </label>
+                </div>
+
+                <label class="grid gap-1 text-sm">
+                  <span class="text-white/70">Wiadomość</span>
+                  <textarea required rows="4"
+                    class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
+                    placeholder="Co chcesz zrobić? Jaki termin / budżet / zakres?"></textarea>
+                </label>
+
+                <button type="submit"
+                  class="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+                  <i data-lucide="send" class="h-4 w-4"></i>
+                  <span>Wyślij (demo)</span>
+                </button>
+
+                <p class="text-xs text-white/50">
+                  Ten formularz jest w trybie demo — podepnij backend lub np. FormSubmit.
+                </p>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10">
+    <div class="mx-auto max-w-7xl px-4 py-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-xl bg-white/5 border border-white/10 grid place-items-center">
+            <i data-lucide="sparkles" class="h-5 w-5 text-[var(--accent)]"></i>
+          </div>
+          <div>
+            <div class="font-bold">Velorie</div>
+            <div class="text-xs text-white/60">© <span id="year"></span> · Wszelkie prawa zastrzeżone.</div>
+          </div>
+        </div>
+        <p class="text-sm text-white/70">
+          Tworzymy oprogramowanie i rozwijamy ekosystem produktów cyfrowych.
+        </p>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3">Produkty</div>
+        <ul class="space-y-2 text-sm text-white/70">
+          <li><a class="hover:text-white" href="https://www.market.velorie.pl" target="_blank" rel="noopener">Velorie Market</a></li>
+          <li><a class="hover:text-white" href="https://www.design.velorie.pl" target="_blank" rel="noopener">Velorie Design</a></li>
+          <li><span class="text-white/40">Velorie Mclist (wkrótce)</span></li>
+          <li><span class="text-white/40">Velorie Itemshop (wkrótce)</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3">Nawigacja</div>
+        <ul class="space-y-2 text-sm text-white/70">
+          <li><a class="hover:text-white" href="#produkty">Produkty</a></li>
+          <li><a class="hover:text-white" href="#co-robimy">Co robimy</a></li>
+          <li><a class="hover:text-white" href="#wspolpraca">Współpraca</a></li>
+          <li><a class="hover:text-white" href="#kontakt">Kontakt</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3">Szybkie linki</div>
+        <div class="grid gap-2">
+          <a href="https://www.market.velorie.pl" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
+            <i data-lucide="briefcase" class="h-4 w-4"></i>
+            <span>Velorie Market</span>
+          </a>
+          <a href="https://www.design.velorie.pl" target="_blank" rel="noopener"
+             class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-semibold hover:bg-white/10 transition">
+            <i data-lucide="palette" class="h-4 w-4"></i>
+            <span>Velorie Design</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Schema.org
+    document.getElementById("schema-json").textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "Velorie",
+      url: window.location.href,
+      inLanguage: "PL",
+      description: "Velorie tworzy oprogramowanie i produkty cyfrowe. Ekosystem: m.in. Velorie Market i Velorie Design."
+    });
+
+    // year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // lucide icons
+    lucide.createIcons();
+
+    // mobile menu
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    menuBtn?.addEventListener("click", () => {
+      mobileMenu.classList.toggle("hidden");
+    });
+    mobileMenu?.querySelectorAll("a").forEach(a => a.addEventListener("click", () => mobileMenu.classList.add("hidden")));
+
+    // parallax hero
+    const heroText = document.getElementById("heroText");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY < window.innerHeight) heroText.style.transform = `translateY(${window.scrollY * 0.18}px)`;
+    }, { passive:true });
+
+    // scroll progress
+    const progressBar = document.getElementById("scroll-progress");
+    const updateProgress = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const p = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = `${p}%`;
+    };
+    window.addEventListener("scroll", updateProgress, { passive:true });
+    updateProgress();
+
+    // particles
+    const createParticles = () => {
+      const container = document.getElementById("particles");
+      if (!container) return;
+      container.innerHTML = "";
+      const ACCENT = "#ff0354";
+      for (let i = 0; i < 26; i++) {
+        const p = document.createElement("span");
+        const size = 22 + (i % 6) * 10;
+        p.className = "absolute rounded-full opacity-20 blur-2xl particle";
+        p.style.cssText = `
+          width:${size}px;height:${size}px;
+          background:${i % 3 ? ACCENT : "#4f46e5"};
+          left:${Math.random() * 100}%;
+          top:${Math.random() * 100}%;
+          animation-duration:${10 + (i % 6)}s;
+          animation-delay:${i * 0.18}s;
+        `;
+        container.appendChild(p);
+      }
+    };
+    createParticles();
+
+    // reveal on scroll
+    let observer;
+    const initScrollAnimations = () => {
+      if (observer) observer.disconnect();
+      observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add("is-visible"); obs.unobserve(e.target); }
         });
-    </script>
+      }, { threshold: 0.12 });
+      document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+    };
+    initScrollAnimations();
+
+    // demo form handler
+    window.VelorieDemoForm = {
+      submit: (ev) => {
+        ev.preventDefault();
+        const btn = ev.target.querySelector('button[type="submit"]');
+        if (btn) {
+          const old = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = '<i data-lucide="check" class="h-4 w-4"></i><span>Wysłano (demo)</span>';
+          lucide.createIcons();
+          setTimeout(() => { btn.disabled = false; btn.innerHTML = old; lucide.createIcons(); ev.target.reset(); }, 1400);
+        }
+        return false;
+      }
+    };
+  </script>
 </body>
 </html>
