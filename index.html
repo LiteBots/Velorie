@@ -2,55 +2,185 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <title>Velorie — Tworzymy oprogramowanie i produkty cyfrowe</title>
-  <meta name="description" content="Velorie tworzy oprogramowanie i produkty cyfrowe. Rozwijamy ekosystem usług i narzędzi — m.in. Velorie Market oraz Velorie Design." />
+  <title>Velorie Design — SaaS & Strony internetowe</title>
+  <meta name="description" content="Velorie Design — studio tworzące nowoczesne oprogramowanie SaaS i strony internetowe. Minimalistyczny design, wysoka wydajność, szybkie wdrożenia." />
   <meta name="theme-color" content="#0a1030" />
 
+  <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script type="application/ld+json" id="schema-json"></script>
 
   <style>
-    :root { --accent:#ff0354; }
-    html { scroll-behavior: smooth; }
+    :root{
+      --accent:#ff0354;
+      --accent2:#7c3aed;
+      --bg1:#00010f;
+      --bg2:#0a1030;
+      --stroke: rgba(255,255,255,.12);
+    }
+
+    html{scroll-behavior:smooth}
     body{
-      background-color:#00010f;
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(124,58,237,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 15%, rgba(255,3,84,.16), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height:100svh;
+      min-height:100dvh;
+      overflow-x:hidden;
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      color: rgba(255,255,255,.92);
+    }
+
+    /* grid */
+    .grid-bg{
+      position: fixed; inset: 0;
+      pointer-events: none;
+      opacity: .22;
       background-image:
-        radial-gradient(1200px 600px at 80% -10%, #0a1030 0%, #050919 35%, #00010f 65%, #000000 100%);
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,.95) 0%, rgba(0,0,0,.20) 55%, transparent 75%);
+      transform: translateZ(0);
+      animation: gridFloat 12s ease-in-out infinite;
+    }
+    @keyframes gridFloat{
+      0%,100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(0,-10px,0) scale(1.02); }
     }
 
-    /* scroll progress */
-    #scroll-progress{
-      position:fixed; inset:0 0 auto 0; height:2px; width:0%;
-      background:var(--accent); z-index:70;
-      box-shadow: 0 10px 30px rgba(255,3,84,.35);
+    /* aurora */
+    .aurora{
+      position: fixed; inset: -20%;
+      pointer-events: none;
+      filter: blur(46px) saturate(125%);
+      opacity: .90;
+      transform: translateZ(0);
+    }
+    .blob{
+      position:absolute;
+      width: clamp(320px, 40vw, 560px);
+      height: clamp(320px, 40vw, 560px);
+      border-radius:999px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,3,84,.35), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(124,58,237,.35), transparent 60%);
+      animation: blob 14s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .blob.b1{ left: 8%; top: 8%; }
+    .blob.b2{
+      width: clamp(360px, 48vw, 680px);
+      height: clamp(360px, 48vw, 680px);
+      left: 62%; top: 18%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(124,58,237,.38), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(255,3,84,.28), transparent 60%);
+      animation-duration: 18s;
+      animation-delay: -3s;
+    }
+    @keyframes blob{
+      0%,100% { transform: translate(0,0) scale(1); }
+      30% { transform: translate(40px, 18px) scale(1.08); }
+      60% { transform: translate(-28px, 34px) scale(0.98); }
     }
 
-    /* animate on scroll */
+    /* noise */
+    .noise{
+      position: fixed; inset: 0;
+      pointer-events: none;
+      opacity: .09;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    /* reveal */
     .animate-on-scroll{
-      opacity:0; transform: translateY(22px);
+      opacity:0;
+      transform: translateY(24px);
       transition: opacity .6s ease-out, transform .6s ease-out;
       will-change: opacity, transform;
     }
     .animate-on-scroll.is-visible{ opacity:1; transform: translateY(0); }
 
-    /* particles */
-    @keyframes particle-animation{
-      0%,100%{ transform: translateY(0%) translateX(0%) rotate(0deg); }
-      50%{ transform: translateY(-12%) translateX(6%) rotate(18deg); }
+    /* glass */
+    .glass{
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid var(--stroke);
+      box-shadow:
+        0 18px 60px rgba(0,0,0,.50),
+        inset 0 1px 0 rgba(255,255,255,.10);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
-    .particle{
-      animation-name: particle-animation;
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
+    .glass-soft{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .glass, .glass-soft{ backdrop-filter: none; -webkit-backdrop-filter:none; }
     }
 
-    /* scrollbar */
-    ::-webkit-scrollbar{ width:10px; height:10px; }
-    ::-webkit-scrollbar-thumb{ background: var(--accent); border-radius:999px; }
-    ::-webkit-scrollbar-track{ background: rgba(255,255,255,.08); }
+    .lift{ transition: transform .2s ease, filter .2s ease, background .2s ease, border-color .2s ease; }
+    .lift:hover{ transform: translateY(-2px); }
+    .lift:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      background: linear-gradient(135deg, rgba(255,3,84,1), rgba(124,58,237,1));
+      box-shadow:
+        0 12px 26px rgba(255,3,84,.18),
+        0 10px 32px rgba(124,58,237,.16);
+    }
+    .btn-primary:hover{ filter: brightness(1.06); }
+    .btn-ghost{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .btn-ghost:hover{ background: rgba(255,255,255,.08); }
+
+    /* progress bar */
+    #scroll-progress{
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 60;
+      box-shadow: 0 10px 30px rgba(255,3,84,.35);
+    }
+
+    /* form focus ring */
+    .focus-ring:focus{
+      outline: none;
+      border-color: rgba(255,3,84,.55);
+      box-shadow: 0 0 0 3px rgba(255,3,84,.18);
+    }
+
+    /* logo */
+    .brand-logo{
+      height: 40px;
+      width: auto;
+      max-width: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 22px rgba(255,3,84,.12));
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior: auto; }
+      .grid-bg, .blob{ animation: none !important; }
+      .lift, .animate-on-scroll{ transition: none !important; }
+    }
+
+    /* mobile nav panel */
+    #mobile-nav[hidden]{ display:none; }
   </style>
 
   <script>
@@ -64,391 +194,337 @@
   </script>
 </head>
 
-<body class="min-h-screen text-white selection:bg-[#ff0354]/40 selection:text-white">
+<body class="selection:bg-[#ff0354]/40 selection:text-white">
+  <div class="aurora" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
   <div id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-60 backdrop-blur-xl bg-black/20 border-b border-white/10">
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass-soft">
     <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
-      <a href="#hero" class="flex items-center gap-3">
-        <!-- podmień logo jeśli chcesz -->
-        <div class="h-10 w-10 rounded-xl bg-white/5 border border-white/10 grid place-items-center">
-          <i data-lucide="sparkles" class="h-5 w-5 text-[var(--accent)]"></i>
-        </div>
-        <div class="leading-tight">
-          <div class="text-lg font-semibold tracking-tight">Velorie</div>
-          <div class="text-xs text-white/60">Ekosystem produktów cyfrowych</div>
+      <a href="#top" class="flex items-center gap-3 min-w-0">
+        <!-- to samo logo co w Velorie Market -->
+        <img src="https://i.imgur.com/NDhlWyz.png" alt="Velorie" class="brand-logo" />
+        <div class="leading-tight min-w-0">
+          <div class="text-base sm:text-lg font-semibold tracking-tight truncate">Velorie Design</div>
+          <div class="text-[11px] sm:text-xs text-white/60 truncate">SaaS • Strony WWW • Automatyzacje</div>
         </div>
       </a>
 
-      <nav class="hidden md:flex items-center gap-1 text-sm text-white/70">
-        <a href="#produkty" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Produkty</a>
-        <a href="#co-robimy" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Co robimy</a>
-        <a href="#wspolpraca" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Współpraca</a>
-        <a href="#kontakt" class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white transition">Kontakt</a>
+      <nav class="hidden lg:flex items-center gap-1 text-sm text-white/70">
+        <a href="#uslugi" class="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-white transition">Usługi</a>
+        <a href="#proces" class="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-white transition">Proces</a>
+        <a href="#stack" class="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-white transition">Stack</a>
+        <a href="#realizacje" class="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-white transition">Realizacje</a>
+        <a href="#kontakt" class="rounded-xl px-3 py-2 hover:bg-white/5 hover:text-white transition">Kontakt</a>
       </nav>
 
-      <div class="flex items-center gap-2">
-        <a href="#kontakt" class="hidden sm:inline-flex items-center gap-2 rounded-lg bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition">
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="#kontakt" class="hidden sm:inline-flex items-center gap-2 rounded-xl btn-ghost lift px-4 py-2 text-sm font-medium text-white">
           <i data-lucide="mail" class="h-4 w-4"></i>
           <span>Napisz do nas</span>
         </a>
 
-        <button id="menuBtn" class="md:hidden inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold hover:bg-white/10 transition" aria-label="Otwórz menu">
-          <i data-lucide="menu" class="h-4 w-4"></i>
-          <span class="hidden xs:inline">Menu</span>
+        <a href="#kontakt" class="hidden sm:inline-flex items-center gap-2 rounded-xl btn-primary lift px-4 py-2 text-sm font-semibold">
+          <i data-lucide="sparkles" class="h-4 w-4"></i>
+          <span>Darmowa wycena</span>
+        </a>
+
+        <button id="menu-btn" type="button"
+          class="inline-flex lg:hidden items-center justify-center rounded-xl btn-ghost lift px-3 py-2"
+          aria-label="Otwórz menu" aria-expanded="false" aria-controls="mobile-nav">
+          <i data-lucide="menu" class="h-5 w-5"></i>
         </button>
       </div>
     </div>
 
-    <!-- Mobile menu -->
-    <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 bg-black/30 backdrop-blur-xl">
+    <div id="mobile-nav" hidden class="lg:hidden border-t border-white/10">
       <div class="mx-auto max-w-7xl px-4 py-3 grid gap-2 text-sm text-white/80">
-        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#produkty">Produkty</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#co-robimy">Co robimy</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#wspolpraca">Współpraca</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-white/5 transition" href="#kontakt">Kontakt</a>
-        <div class="h-px bg-white/10 my-1"></div>
-        <a class="rounded-lg px-3 py-2 bg-[var(--accent)] text-white font-semibold hover:brightness-110 transition"
-           href="https://www.market.velorie.pl" target="_blank" rel="noopener">Przejdź do Velorie Market</a>
-        <a class="rounded-lg px-3 py-2 border border-white/10 bg-white/5 hover:bg-white/10 transition"
-           href="https://www.design.velorie.pl" target="_blank" rel="noopener">Przejdź do Velorie Design</a>
+        <a href="#uslugi" class="rounded-xl px-3 py-2 hover:bg-white/5">Usługi</a>
+        <a href="#proces" class="rounded-xl px-3 py-2 hover:bg-white/5">Proces</a>
+        <a href="#stack" class="rounded-xl px-3 py-2 hover:bg-white/5">Stack</a>
+        <a href="#realizacje" class="rounded-xl px-3 py-2 hover:bg-white/5">Realizacje</a>
+        <a href="#kontakt" class="rounded-xl px-3 py-2 hover:bg-white/5">Kontakt</a>
+        <div class="pt-2 flex flex-col gap-2">
+          <a href="#kontakt" class="inline-flex items-center justify-center gap-2 rounded-2xl btn-ghost lift px-4 py-3 font-semibold">
+            <i data-lucide="mail" class="h-4 w-4"></i><span>Napisz</span>
+          </a>
+          <a href="#kontakt" class="inline-flex items-center justify-center gap-2 rounded-2xl btn-primary lift px-4 py-3 font-semibold">
+            <i data-lucide="sparkles" class="h-4 w-4"></i><span>Darmowa wycena</span>
+          </a>
+        </div>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section id="hero" class="relative overflow-hidden">
-      <div id="particles" aria-hidden="true" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
-
-      <div class="mx-auto max-w-7xl px-4 py-20 md:py-28 grid lg:grid-cols-2 gap-10 items-center">
-        <div id="heroText" class="space-y-6">
-          <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
-            <i data-lucide="layers" class="h-3 w-3"></i>
-            <span>Velorie = marka parasolowa dla produktów cyfrowych</span>
+  <main id="top" class="relative z-10">
+    <!-- HERO -->
+    <section class="relative overflow-hidden">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:py-20 md:py-28 grid lg:grid-cols-12 gap-10 items-center">
+        <div class="lg:col-span-7 space-y-6">
+          <span class="inline-flex flex-wrap items-center gap-2 rounded-full glass-soft px-3 py-1 text-[11px] sm:text-xs text-white/80">
+            <i data-lucide="rocket" class="h-3 w-3"></i>
+            <span>Szybkie wdrożenia • Minimalizm • Wydajność</span>
           </span>
 
           <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05]">
-            <span class="block">Tworzymy oprogramowanie</span>
-            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">
-              i budujemy ekosystem produktów Velorie
-            </span>
+            <span class="block">Budujemy</span>
+            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">SaaS i strony WWW</span>
+            <span class="block">które sprzedają</span>
           </h1>
 
           <p class="max-w-xl text-white/70">
-            Działamy jak “suite” produktów: rozwijamy osobne moduły i usługi pod jedną marką.
-            Dostarczamy rozwiązania, które są proste w użyciu, szybkie w wdrożeniu i gotowe do rozwoju.
+            Velorie Design to studio tworzące oprogramowanie SaaS, landing page, panele klienta i aplikacje webowe.
+            Projektujemy minimalistycznie, wdrażamy szybko, dowozimy jakość.
           </p>
 
           <div class="flex flex-wrap items-center gap-3">
-            <a href="#produkty"
-               class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-              <i data-lucide="rocket" class="h-4 w-4"></i>
-              <span>Zobacz produkty</span>
+            <a href="#kontakt" class="inline-flex items-center gap-2 rounded-2xl btn-primary lift px-5 py-3 text-sm font-semibold">
+              <i data-lucide="message-square" class="h-4 w-4"></i>
+              <span>Porozmawiajmy</span>
             </a>
-            <a href="#wspolpraca"
-               class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition">
-              <i data-lucide="handshake" class="h-4 w-4"></i>
-              <span>Współpraca</span>
+            <a href="#uslugi" class="inline-flex items-center gap-2 rounded-2xl btn-ghost lift px-5 py-3 text-sm font-semibold text-white">
+              <i data-lucide="layers" class="h-4 w-4"></i>
+              <span>Zobacz usługi</span>
             </a>
           </div>
 
           <div class="flex flex-wrap items-center gap-3 text-xs text-white/60">
-            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-              <i data-lucide="sparkles" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
-              Produkty modułowe
-            </span>
-            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-              <i data-lucide="shield" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
-              Stabilność i bezpieczeństwo
-            </span>
-            <span class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+            <span class="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1">
               <i data-lucide="zap" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
-              Szybkie iteracje
+              MVP w tygodnie, nie miesiące
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1">
+              <i data-lucide="shield-check" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
+              Bezpieczne wdrożenia i hosting
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-full glass-soft px-3 py-1">
+              <i data-lucide="cpu" class="h-3.5 w-3.5 text-[var(--accent)]"></i>
+              Nowoczesny stack (React/Next, Node, DB)
             </span>
           </div>
         </div>
 
-        <!-- Right hero card -->
-        <div class="animate-on-scroll">
-          <div class="relative rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_10px_50px_rgba(0,0,0,0.45)] p-5">
-            <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,3,84,0.35),transparent,rgba(79,70,229,0.35),transparent)] blur-2xl"></div>
+        <div class="lg:col-span-5 animate-on-scroll">
+          <div class="relative mx-auto w-full max-w-xl">
+            <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,3,84,0.35),transparent,rgba(124,58,237,0.35),transparent)] blur-2xl"></div>
 
-            <div class="rounded-2xl border border-white/10 bg-black/50 p-5">
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="text-xs text-white/60">Velorie</div>
-                  <div class="text-xl font-extrabold mt-1">Produkty pod jedną marką</div>
+            <div class="glass rounded-[2rem] p-3">
+              <div class="rounded-[1.5rem] border border-white/10 bg-black/55 p-4">
+                <div class="flex items-center justify-between gap-3">
+                  <div class="text-sm font-semibold">Co robimy najlepiej</div>
+                  <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
+                    <i data-lucide="sparkles" class="h-4 w-4"></i>
+                    Minimal tech
+                  </span>
                 </div>
-                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
-                  <i data-lucide="badge-check" class="h-4 w-4"></i>
-                  Profesjonalnie
-                </span>
-              </div>
 
-              <div class="mt-5 grid sm:grid-cols-2 gap-3">
-                <a class="group rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition p-4"
-                   href="https://www.market.velorie.pl" target="_blank" rel="noopener">
+                <div class="mt-4 grid gap-3">
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4 lift">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="layout-dashboard" class="h-4 w-4 text-[var(--accent)]"></i>
+                      <div class="font-semibold text-sm">SaaS / Panele / Dashboardy</div>
+                    </div>
+                    <div class="mt-2 text-xs text-white/65">Autoryzacja, role, billing, integracje, analityka.</div>
+                  </div>
+
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4 lift">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="globe" class="h-4 w-4 text-[var(--accent)]"></i>
+                      <div class="font-semibold text-sm">Strony WWW i landing page</div>
+                    </div>
+                    <div class="mt-2 text-xs text-white/65">Szybkie ładowanie, SEO, konwersja, formularze.</div>
+                  </div>
+
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4 lift">
+                    <div class="flex items-center gap-2">
+                      <i data-lucide="plug" class="h-4 w-4 text-[var(--accent)]"></i>
+                      <div class="font-semibold text-sm">Integracje & automatyzacje</div>
+                    </div>
+                    <div class="mt-2 text-xs text-white/65">Webhooki, CRM, płatności, powiadomienia, API.</div>
+                  </div>
+                </div>
+
+                <div class="mt-4 rounded-xl border border-white/10 bg-black/30 p-3 text-xs text-white/65">
                   <div class="flex items-center gap-2">
-                    <i data-lucide="briefcase" class="h-5 w-5 text-[var(--accent)]"></i>
-                    <div class="font-semibold">Velorie Market</div>
+                    <i data-lucide="timer" class="h-4 w-4 text-white/60"></i>
+                    <span>Od briefu do planu wdrożenia: zwykle <span class="text-white/80 font-semibold">24–48h</span>.</span>
                   </div>
-                  <p class="mt-2 text-sm text-white/70">
-                    Platforma ogłoszeniowa i profile freelancerów.
-                  </p>
-                  <div class="mt-3 text-xs text-white/60 inline-flex items-center gap-2">
-                    <span>Otwórz</span>
-                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-0.5 transition-transform"></i>
-                  </div>
-                </a>
-
-                <a class="group rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition p-4"
-                   href="https://www.design.velorie.pl" target="_blank" rel="noopener">
-                  <div class="flex items-center gap-2">
-                    <i data-lucide="palette" class="h-5 w-5 text-[var(--accent)]"></i>
-                    <div class="font-semibold">Velorie Design</div>
-                  </div>
-                  <p class="mt-2 text-sm text-white/70">
-                    Design, identyfikacja, UI/UX i assets.
-                  </p>
-                  <div class="mt-3 text-xs text-white/60 inline-flex items-center gap-2">
-                    <span>Otwórz</span>
-                    <i data-lucide="arrow-right" class="h-4 w-4 group-hover:translate-x-0.5 transition-transform"></i>
-                  </div>
-                </a>
-              </div>
-
-              <div class="mt-4 rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/65">
-                <div class="flex items-start gap-2">
-                  <i data-lucide="info" class="h-4 w-4 mt-0.5 text-white/70"></i>
-                  <p>
-                    W Velorie rozwijamy też kolejne odnogi (np. Mclist, Itemshop itd.) — ta strona jest centralnym hubem marki.
-                  </p>
                 </div>
               </div>
             </div>
-          </div>
 
-          <p class="mt-4 text-center text-xs text-white/55">
-            Centralna strona Velorie — linki do produktów i współpracy.
-          </p>
+            <div class="mt-4 text-center text-xs text-white/55 px-2">
+              Projektujemy i kodujemy — bez przerostu formy.
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Produkty -->
-    <section id="produkty" class="relative py-20">
+    <!-- USŁUGI -->
+    <section id="uslugi" class="relative py-16 sm:py-20">
       <div class="mx-auto max-w-7xl px-4">
-        <div class="flex items-end justify-between gap-6 flex-wrap">
+        <div class="flex items-end justify-between gap-4 flex-wrap">
           <div>
-            <h2 class="text-3xl md:text-4xl font-black">Produkty Velorie</h2>
-            <p class="mt-2 text-white/60 max-w-2xl">
-              Każdy produkt ma własny kierunek rozwoju, ale wspólny standard jakości, designu i doświadczenia użytkownika.
+            <h2 class="text-3xl md:text-4xl font-black">Usługi</h2>
+            <p class="text-white/60 mt-2 max-w-2xl">
+              Minimalistyczny design + solidny backend. Skupiamy się na funkcji, UX i wydajności.
             </p>
           </div>
-          <div class="flex gap-2">
-            <a href="https://www.market.velorie.pl" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_30px_rgba(255,3,84,0.35)]">
-              <i data-lucide="briefcase" class="h-4 w-4"></i>
-              <span>Market</span>
-            </a>
-            <a href="https://www.design.velorie.pl" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold hover:bg-white/10 transition">
-              <i data-lucide="palette" class="h-4 w-4"></i>
-              <span>Design</span>
-            </a>
-          </div>
+          <a href="#kontakt" class="inline-flex items-center gap-2 rounded-2xl btn-ghost lift px-4 py-2 text-sm font-semibold">
+            <i data-lucide="arrow-right" class="h-4 w-4"></i>
+            <span>Zapytaj o ofertę</span>
+          </a>
         </div>
 
-        <div class="mt-10 grid md:grid-cols-3 gap-6">
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+        <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="briefcase" class="h-5 w-5"></i>
+                <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
               </span>
               <div>
-                <div class="font-bold">Velorie Market</div>
-                <div class="text-xs text-white/60">Freelancerzy • Ogłoszenia • Profile</div>
+                <div class="font-bold">SaaS / aplikacje web</div>
+                <div class="text-xs text-white/60">MVP • skalowanie • role • billing</div>
               </div>
             </div>
             <p class="mt-4 text-sm text-white/70">
-              Miejsce do łączenia zleceniodawców i wykonawców. Profile, portfolio i szybki kontakt.
+              Od pomysłu do działającego produktu. Panel, API, baza, deployment, monitoring.
             </p>
-            <a class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
-               href="https://www.market.velorie.pl" target="_blank" rel="noopener">
-              Otwórz Market <i data-lucide="arrow-right" class="h-4 w-4"></i>
-            </a>
           </div>
 
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="palette" class="h-5 w-5"></i>
+                <i data-lucide="globe" class="h-5 w-5"></i>
               </span>
               <div>
-                <div class="font-bold">Velorie Design</div>
-                <div class="text-xs text-white/60">Branding • UI/UX • Grafika</div>
+                <div class="font-bold">Strony internetowe</div>
+                <div class="text-xs text-white/60">SEO • performance • konwersja</div>
               </div>
             </div>
             <p class="mt-4 text-sm text-white/70">
-              Projekty graficzne, systemy identyfikacji, UI i materiały pod produkty cyfrowe.
+              Landing page, strony firmowe, mikroserwisy marketingowe. Szybkie ładowanie i UX.
             </p>
-            <a class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-white/90"
-               href="https://www.design.velorie.pl" target="_blank" rel="noopener">
-              Otwórz Design <i data-lucide="arrow-right" class="h-4 w-4"></i>
-            </a>
           </div>
 
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="layers" class="h-5 w-5"></i>
+                <i data-lucide="paintbrush" class="h-5 w-5"></i>
               </span>
               <div>
-                <div class="font-bold">Pozostałe odnogi</div>
-                <div class="text-xs text-white/60">Mclist • Itemshop • i więcej</div>
+                <div class="font-bold">UI/UX + Design system</div>
+                <div class="text-xs text-white/60">minimal • czytelnie • spójnie</div>
               </div>
             </div>
             <p class="mt-4 text-sm text-white/70">
-              Rozwijamy kolejne produkty w ramach ekosystemu Velorie. (Tutaj możesz dodać linki, gdy będą gotowe.)
+              Makiety, komponenty, warianty, dark mode, mikrointerakcje. Bez chaosu.
             </p>
-            <div class="mt-5 text-xs text-white/55 inline-flex items-center gap-2">
-              <i data-lucide="clock" class="h-4 w-4"></i>
-              <span>W przygotowaniu / w rozwoju</span>
-            </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Co robimy -->
-    <section id="co-robimy" class="relative py-20">
-      <div class="mx-auto max-w-7xl px-4">
-        <div class="grid lg:grid-cols-12 gap-8 items-start">
-          <div class="lg:col-span-7 space-y-4">
-            <h2 class="text-3xl md:text-4xl font-black">Czym się zajmujemy?</h2>
-            <p class="text-white/70 max-w-2xl">
-              Velorie tworzy oprogramowanie i produkty cyfrowe. Projektujemy doświadczenie, budujemy funkcje,
-              dbamy o performance i iterujemy szybko — tak, żeby produkty realnie rosły.
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="plug" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Integracje</div>
+                <div class="text-xs text-white/60">płatności • webhooki • CRM</div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-white/70">
+              PayU/Stripe, Discord, e-mail, automatyzacje, importy/eksporty, API.
             </p>
-
-            <div class="grid sm:grid-cols-2 gap-4 pt-4">
-              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="code" class="h-5 w-5 text-[var(--accent)]"></i>
-                  <div class="font-semibold">Development</div>
-                </div>
-                <p class="mt-2 text-sm text-white/70">Aplikacje webowe, panele, systemy, automatyzacje i integracje.</p>
-              </div>
-
-              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="layout" class="h-5 w-5 text-[var(--accent)]"></i>
-                  <div class="font-semibold">UI/UX & Design</div>
-                </div>
-                <p class="mt-2 text-sm text-white/70">Glass/dark style, design systemy, landing pages i branding.</p>
-              </div>
-
-              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="shield" class="h-5 w-5 text-[var(--accent)]"></i>
-                  <div class="font-semibold">Bezpieczeństwo</div>
-                </div>
-                <p class="mt-2 text-sm text-white/70">Podstawy hardeningu, dobre praktyki, kontrola dostępu.</p>
-              </div>
-
-              <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-                <div class="flex items-center gap-2">
-                  <i data-lucide="trending-up" class="h-5 w-5 text-[var(--accent)]"></i>
-                  <div class="font-semibold">Rozwój produktu</div>
-                </div>
-                <p class="mt-2 text-sm text-white/70">Roadmapa, iteracje, testy, wdrożenia i analityka (jeśli potrzebna).</p>
-              </div>
-            </div>
           </div>
 
-          <div class="lg:col-span-5">
-            <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="text-sm text-white/60">Standard</div>
-                  <div class="text-xl font-bold mt-1">Jeden styl, wiele produktów</div>
-                </div>
-                <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
-                  <i data-lucide="sparkles" class="h-4 w-4"></i>
-                  Velorie
-                </span>
-              </div>
-
-              <ul class="mt-5 space-y-3 text-sm text-white/75">
-                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Spójny design i UX między produktami</span></li>
-                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Modułowość — rozwój bez chaosu</span></li>
-                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Skalowalny fundament pod kolejne odnogi</span></li>
-                <li class="flex items-start gap-2"><i data-lucide="check" class="h-5 w-5 mt-0.5 text-[var(--accent)] shrink-0"></i><span>Wdrożenia i iteracje w krótkich cyklach</span></li>
-              </ul>
-
-              <div class="mt-6 rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/65">
-                <div class="flex items-start gap-2">
-                  <i data-lucide="info" class="h-4 w-4 mt-0.5 text-white/70"></i>
-                  <p>Jeśli chcesz, dodam tu realne stack/technologie, liczby (wdrożenia, uptime, users) oraz case studies.</p>
-                </div>
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="shield" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Bezpieczeństwo</div>
+                <div class="text-xs text-white/60">auth • rate-limit • hardening</div>
               </div>
             </div>
+            <p class="mt-4 text-sm text-white/70">
+              Dobre praktyki, audyt podstawowy, poprawne sesje, uprawnienia i logowanie zdarzeń.
+            </p>
           </div>
 
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
+                <i data-lucide="activity" class="h-5 w-5"></i>
+              </span>
+              <div>
+                <div class="font-bold">Utrzymanie & rozwój</div>
+                <div class="text-xs text-white/60">SLA • monitoring • roadmap</div>
+              </div>
+            </div>
+            <p class="mt-4 text-sm text-white/70">
+              Wsparcie po wdrożeniu: poprawki, rozwój funkcji, optymalizacje, backup.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Współpraca -->
-    <section id="wspolpraca" class="relative py-20">
+    <!-- PROCES -->
+    <section id="proces" class="relative py-16 sm:py-20">
       <div class="mx-auto max-w-7xl px-4">
-        <h2 class="text-3xl md:text-4xl font-black mb-2">Współpraca</h2>
+        <h2 class="text-3xl md:text-4xl font-black mb-2">Proces</h2>
         <p class="text-white/60 mb-10 max-w-2xl">
-          Współpracujemy z twórcami, markami i społecznościami. Jeśli masz pomysł na produkt, integrację, partnerstwo
-          albo potrzebujesz wdrożenia — odezwij się.
+          Prosto, przewidywalnie i bez przeciągania. Każdy etap ma konkretny rezultat.
         </p>
 
         <div class="grid md:grid-cols-3 gap-6">
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="handshake" class="h-5 w-5"></i>
+                <i data-lucide="clipboard-list" class="h-5 w-5"></i>
               </span>
-              <div class="font-bold">Partnerstwa</div>
+              <div class="font-bold">1) Brief</div>
             </div>
-            <p class="mt-3 text-sm text-white/70">Cross-promo, integracje, wspólne akcje i rozwój produktów.</p>
+            <p class="mt-3 text-sm text-white/70">Cel, odbiorcy, funkcje, zakres, termin. Ustalamy priorytety.</p>
           </div>
 
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="briefcase-business" class="h-5 w-5"></i>
+                <i data-lucide="pencil-ruler" class="h-5 w-5"></i>
               </span>
-              <div class="font-bold">B2B / realizacje</div>
+              <div class="font-bold">2) Projekt</div>
             </div>
-            <p class="mt-3 text-sm text-white/70">Landing, panel, system, automatyzacja — od MVP po rozwój.</p>
+            <p class="mt-3 text-sm text-white/70">Makiety, UI, flow użytkownika. Zatwierdzenie kierunku.</p>
           </div>
 
-          <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] ring-1 ring-white/10">
-                <i data-lucide="megaphone" class="h-5 w-5"></i>
+                <i data-lucide="code-2" class="h-5 w-5"></i>
               </span>
-              <div class="font-bold">Wspólny marketing</div>
+              <div class="font-bold">3) Wdrożenie</div>
             </div>
-            <p class="mt-3 text-sm text-white/70">Promocje produktów Velorie i kampanie w obrębie społeczności.</p>
+            <p class="mt-3 text-sm text-white/70">Frontend + backend, testy, deploy. Odbiór i iteracje.</p>
           </div>
         </div>
 
-        <div class="mt-10 animate-on-scroll rounded-2xl border border-white/10 bg-black/30 p-6">
+        <div class="mt-10 animate-on-scroll rounded-2xl glass p-6">
           <div class="flex items-start gap-3">
-            <i data-lucide="workflow" class="h-5 w-5 text-[var(--accent)] mt-0.5"></i>
+            <i data-lucide="sparkles" class="h-5 w-5 text-[var(--accent)] mt-0.5"></i>
             <div>
-              <div class="font-semibold">Jak wygląda start?</div>
+              <div class="font-semibold">Minimalizm ≠ ubogo</div>
               <p class="text-sm text-white/70 mt-1">
-                1) Krótka wiadomość → 2) ustalenie celu i zakresu → 3) propozycja planu → 4) wdrożenie / iteracje.
+                Minimalistyczny interfejs jest po to, żeby użytkownik szybciej robił to, po co przyszedł.
+                Reszta to solidna architektura i szybkość działania.
               </p>
             </div>
           </div>
@@ -456,83 +532,251 @@
       </div>
     </section>
 
-    <!-- Kontakt -->
-    <section id="kontakt" class="relative py-20">
+    <!-- STACK -->
+    <section id="stack" class="relative py-16 sm:py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <h2 class="text-3xl md:text-4xl font-black mb-2">Stack technologiczny</h2>
+        <p class="text-white/60 mb-10 max-w-2xl">
+          Dobieramy narzędzia do produktu. Bez narzucania — liczy się stabilność i rozwój.
+        </p>
+
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="monitor" class="h-5 w-5 text-[var(--accent)]"></i>
+              <div class="font-bold">Frontend</div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">React</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Next.js</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Tailwind</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">TypeScript</span>
+            </div>
+          </div>
+
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="server" class="h-5 w-5 text-[var(--accent)]"></i>
+              <div class="font-bold">Backend</div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Node.js</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Express</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">PostgreSQL</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Redis</span>
+            </div>
+          </div>
+
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center gap-3">
+              <i data-lucide="cloud" class="h-5 w-5 text-[var(--accent)]"></i>
+              <div class="font-bold">Deploy</div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Docker</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">VPS</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">CI/CD</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Monitoring</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REALIZACJE (placeholder) -->
+    <section id="realizacje" class="relative py-16 sm:py-20">
+      <div class="mx-auto max-w-7xl px-4">
+        <h2 class="text-3xl md:text-4xl font-black mb-2">Realizacje</h2>
+        <p class="text-white/60 mb-10 max-w-2xl">
+          Poniżej miejsce na Twoje projekty. Wstaw screeny, linki lub krótkie case study.
+        </p>
+
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center justify-between gap-3">
+              <div class="font-bold">Projekt #1</div>
+              <span class="text-xs text-white/50">SaaS</span>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Krótki opis: co zrobione, jaki efekt, jakie technologie.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Next</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Postgres</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Auth</span>
+            </div>
+          </div>
+
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center justify-between gap-3">
+              <div class="font-bold">Projekt #2</div>
+              <span class="text-xs text-white/50">WWW</span>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Krótki opis: konwersja, SEO, szybkość, formularz.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Landing</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">SEO</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Perf</span>
+            </div>
+          </div>
+
+          <div class="animate-on-scroll glass rounded-2xl p-6">
+            <div class="flex items-center justify-between gap-3">
+              <div class="font-bold">Projekt #3</div>
+              <span class="text-xs text-white/50">Integracje</span>
+            </div>
+            <p class="mt-3 text-sm text-white/70">Krótki opis: webhooki, powiadomienia, automatyzacje.</p>
+            <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-white/70">
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">API</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Discord</span>
+              <span class="rounded-full border border-white/10 bg-black/30 px-2.5 py-1">Stripe</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAKT -->
+    <section id="kontakt" class="relative py-16 sm:py-20">
       <div class="mx-auto max-w-7xl px-4">
         <div class="grid lg:grid-cols-12 gap-8 items-start">
-          <div class="lg:col-span-6 space-y-4">
+          <div class="lg:col-span-5 space-y-4">
             <h2 class="text-3xl md:text-4xl font-black">Kontakt</h2>
             <p class="text-white/70 max-w-xl">
-              Napisz, z czym startujesz. Odpowiadamy szybko i konkretnie.
-              (Wstaw tu swoje realne kanały: Discord / e-mail / social.)
+              Napisz, co chcesz zbudować. Odpowiemy z planem, czasem i wyceną.
             </p>
 
-            <div class="grid sm:grid-cols-2 gap-4 pt-2">
-              <a href="mailto:kontakt@velorie.pl"
-                 class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 transition">
+            <div class="grid gap-3">
+              <div class="animate-on-scroll glass rounded-2xl p-5">
                 <div class="flex items-center gap-2">
                   <i data-lucide="mail" class="h-5 w-5 text-[var(--accent)]"></i>
                   <div class="font-semibold">E-mail</div>
                 </div>
-                <p class="mt-2 text-sm text-white/70">kontakt@velorie.pl <span class="text-white/40">(podmień)</span></p>
-              </a>
+                <a href="mailto:kontakt@velorie.design" class="mt-2 block text-sm text-white/70 hover:text-white">
+                  kontakt@velorie.design
+                </a>
+              </div>
 
-              <a href="#"
-                 class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 hover:bg-white/10 transition">
+              <div class="animate-on-scroll glass rounded-2xl p-5">
                 <div class="flex items-center gap-2">
                   <i data-lucide="message-circle" class="h-5 w-5 text-[var(--accent)]"></i>
                   <div class="font-semibold">Discord</div>
                 </div>
-                <p class="mt-2 text-sm text-white/70">Link do serwera <span class="text-white/40">(wstaw)</span></p>
-              </a>
+                <div class="mt-2 text-sm text-white/70">
+                  Najszybciej: DM / serwer (wstaw link)
+                </div>
+              </div>
+
+              <div class="animate-on-scroll glass rounded-2xl p-5">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="clock" class="h-5 w-5 text-[var(--accent)]"></i>
+                  <div class="font-semibold">Czas odpowiedzi</div>
+                </div>
+                <div class="mt-2 text-sm text-white/70">
+                  Zwykle w <span class="text-white/90 font-semibold">24–48h</span>.
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="lg:col-span-6">
-            <div class="animate-on-scroll rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_10px_50px_rgba(0,0,0,0.4)]">
-              <div class="flex items-center justify-between gap-4 flex-wrap">
+          <!-- Form -->
+          <div class="lg:col-span-7">
+            <div class="animate-on-scroll glass rounded-2xl p-6">
+              <div class="flex items-center justify-between gap-3 flex-wrap">
                 <div>
-                  <div class="text-sm text-white/60">Formularz</div>
-                  <div class="text-xl font-bold mt-1">Opisz temat w 60 sekund</div>
+                  <div class="text-sm text-white/60">Darmowa konsultacja</div>
+                  <div class="text-xl font-bold mt-1">Opisz projekt w 60 sekund</div>
                 </div>
                 <span class="inline-flex items-center gap-2 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] px-3 py-1 text-xs font-semibold">
-                  <i data-lucide="sparkles" class="h-4 w-4"></i>
-                  Velorie
+                  <i data-lucide="shield-check" class="h-4 w-4"></i>
+                  Bez spamu
                 </span>
               </div>
 
-              <!-- demo form (podmień na własny backend / FormSubmit itp.) -->
-              <form class="mt-5 grid gap-3" onsubmit="return window.VelorieDemoForm.submit(event)">
-                <div class="grid sm:grid-cols-2 gap-3">
-                  <label class="grid gap-1 text-sm">
-                    <span class="text-white/70">Imię / nick</span>
-                    <input required class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
-                           placeholder="np. zxq" />
+              <form id="contact-form" class="mt-6 grid gap-4" autocomplete="off">
+                <div class="grid sm:grid-cols-2 gap-4">
+                  <label class="grid gap-2">
+                    <span class="text-xs text-white/60">Imię / Nick</span>
+                    <input id="cf-name" class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90"
+                      placeholder="Np. Prezesie" required />
                   </label>
-                  <label class="grid gap-1 text-sm">
-                    <span class="text-white/70">Kontakt (mail / discord)</span>
-                    <input required class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
-                           placeholder="np. mail@… / @nick" />
+                  <label class="grid gap-2">
+                    <span class="text-xs text-white/60">E-mail</span>
+                    <input id="cf-email" type="email" inputmode="email"
+                      class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90"
+                      placeholder="np. kontakt@firma.pl" required />
                   </label>
                 </div>
 
-                <label class="grid gap-1 text-sm">
-                  <span class="text-white/70">Wiadomość</span>
-                  <textarea required rows="4"
-                    class="rounded-xl border border-white/10 bg-black/30 px-4 py-3 outline-none focus:ring-2 focus:ring-[var(--accent)]/40"
-                    placeholder="Co chcesz zrobić? Jaki termin / budżet / zakres?"></textarea>
+                <label class="grid gap-2">
+                  <span class="text-xs text-white/60">Temat</span>
+                  <input id="cf-subject" class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90"
+                    placeholder="Np. MVP SaaS / Strona WWW / Panel klienta" required />
                 </label>
 
-                <button type="submit"
-                  class="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-                  <i data-lucide="send" class="h-4 w-4"></i>
-                  <span>Wyślij (demo)</span>
-                </button>
+                <label class="grid gap-2">
+                  <span class="text-xs text-white/60">Wiadomość</span>
+                  <textarea id="cf-message" rows="6"
+                    class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90 resize-none"
+                    placeholder="Opisz: co ma robić produkt, kto jest użytkownikiem, deadline, budżet orientacyjny."
+                    required></textarea>
+                </label>
 
-                <p class="text-xs text-white/50">
-                  Ten formularz jest w trybie demo — podepnij backend lub np. FormSubmit.
-                </p>
+                <div class="grid md:grid-cols-3 gap-4">
+                  <label class="grid gap-2">
+                    <span class="text-xs text-white/60">Budżet (opcjonalnie)</span>
+                    <select id="cf-budget" class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90">
+                      <option value="">Wybierz…</option>
+                      <option>do 2k</option>
+                      <option>2k–5k</option>
+                      <option>5k–10k</option>
+                      <option>10k+</option>
+                    </select>
+                  </label>
+                  <label class="grid gap-2">
+                    <span class="text-xs text-white/60">Termin (opcjonalnie)</span>
+                    <select id="cf-deadline" class="focus-ring rounded-2xl bg-black/35 border border-white/10 px-4 py-3 text-sm text-white/90">
+                      <option value="">Wybierz…</option>
+                      <option>ASAP</option>
+                      <option>1–2 tyg.</option>
+                      <option>3–6 tyg.</option>
+                      <option>2+ mies.</option>
+                    </select>
+                  </label>
+                  <div class="grid gap-2">
+                    <span class="text-xs text-white/60">Kanał kontaktu</span>
+                    <div class="grid grid-cols-3 gap-2">
+                      <button type="button" data-channel="email" class="channel-btn lift rounded-2xl btn-ghost px-3 py-3 text-xs font-semibold">E-mail</button>
+                      <button type="button" data-channel="discord" class="channel-btn lift rounded-2xl btn-ghost px-3 py-3 text-xs font-semibold">Discord</button>
+                      <button type="button" data-channel="call" class="channel-btn lift rounded-2xl btn-ghost px-3 py-3 text-xs font-semibold">Call</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                  <div class="text-xs text-white/55">
+                    Klikając „Wyślij”, tworzysz wiadomość. Jeśli chcesz backend — podepnę endpoint/API.
+                  </div>
+
+                  <button id="cf-submit" type="submit"
+                    class="inline-flex items-center justify-center gap-2 rounded-2xl btn-primary lift px-5 py-3 text-sm font-semibold">
+                    <i data-lucide="send" class="h-4 w-4"></i>
+                    <span>Wyślij</span>
+                  </button>
+                </div>
+
+                <div id="cf-status" class="text-sm text-white/70 min-h-[20px]"></div>
               </form>
+
+              <div class="mt-4 rounded-xl border border-white/10 bg-black/30 p-4 text-xs text-white/65">
+                <div class="flex items-start gap-2">
+                  <i data-lucide="info" class="h-4 w-4 mt-0.5 text-white/60"></i>
+                  <div>
+                    <div class="text-white/80 font-semibold">Tip:</div>
+                    Jeśli chcesz „taki sam zapis jak w Velorie Market” (Discord webhook), daj URL webhooka —
+                    podmienię bez gadania.
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -541,155 +785,192 @@
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/10">
-    <div class="mx-auto max-w-7xl px-4 py-10 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div class="space-y-4">
-        <div class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-white/5 border border-white/10 grid place-items-center">
-            <i data-lucide="sparkles" class="h-5 w-5 text-[var(--accent)]"></i>
-          </div>
-          <div>
-            <div class="font-bold">Velorie</div>
-            <div class="text-xs text-white/60">© <span id="year"></span> · Wszelkie prawa zastrzeżone.</div>
-          </div>
+  <!-- FOOTER -->
+  <footer class="relative border-t border-white/10 glass-soft">
+    <div class="mx-auto max-w-7xl px-4 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="https://i.imgur.com/NDhlWyz.png" alt="Velorie" class="h-9 w-auto" />
+        <div>
+          <div class="font-bold">Velorie Design</div>
+          <div class="text-xs text-white/60">© <span id="footer-year"></span> · Minimal tech studio.</div>
         </div>
-        <p class="text-sm text-white/70">
-          Tworzymy oprogramowanie i rozwijamy ekosystem produktów cyfrowych.
-        </p>
       </div>
 
-      <div>
-        <div class="font-semibold mb-3">Produkty</div>
-        <ul class="space-y-2 text-sm text-white/70">
-          <li><a class="hover:text-white" href="https://www.market.velorie.pl" target="_blank" rel="noopener">Velorie Market</a></li>
-          <li><a class="hover:text-white" href="https://www.design.velorie.pl" target="_blank" rel="noopener">Velorie Design</a></li>
-          <li><span class="text-white/40">Velorie Mclist (wkrótce)</span></li>
-          <li><span class="text-white/40">Velorie Itemshop (wkrótce)</span></li>
-        </ul>
-      </div>
-
-      <div>
-        <div class="font-semibold mb-3">Nawigacja</div>
-        <ul class="space-y-2 text-sm text-white/70">
-          <li><a class="hover:text-white" href="#produkty">Produkty</a></li>
-          <li><a class="hover:text-white" href="#co-robimy">Co robimy</a></li>
-          <li><a class="hover:text-white" href="#wspolpraca">Współpraca</a></li>
-          <li><a class="hover:text-white" href="#kontakt">Kontakt</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <div class="font-semibold mb-3">Szybkie linki</div>
-        <div class="grid gap-2">
-          <a href="https://www.market.velorie.pl" target="_blank" rel="noopener"
-             class="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 font-semibold hover:brightness-110 transition shadow-[0_10px_40px_rgba(255,3,84,0.45)]">
-            <i data-lucide="briefcase" class="h-4 w-4"></i>
-            <span>Velorie Market</span>
-          </a>
-          <a href="https://www.design.velorie.pl" target="_blank" rel="noopener"
-             class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-semibold hover:bg-white/10 transition">
-            <i data-lucide="palette" class="h-4 w-4"></i>
-            <span>Velorie Design</span>
-          </a>
-        </div>
+      <div class="flex flex-wrap items-center gap-2 text-xs text-white/60">
+        <a class="rounded-full btn-ghost lift px-3 py-1" href="#uslugi">Usługi</a>
+        <a class="rounded-full btn-ghost lift px-3 py-1" href="#proces">Proces</a>
+        <a class="rounded-full btn-ghost lift px-3 py-1" href="#stack">Stack</a>
+        <a class="rounded-full btn-ghost lift px-3 py-1" href="#kontakt">Kontakt</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // Schema.org
-    document.getElementById("schema-json").textContent = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "Velorie",
-      url: window.location.href,
-      inLanguage: "PL",
-      description: "Velorie tworzy oprogramowanie i produkty cyfrowe. Ekosystem: m.in. Velorie Market i Velorie Design."
-    });
+    document.addEventListener("DOMContentLoaded", () => {
+      // Schema.org
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Velorie Design",
+        url: window.location.href,
+        inLanguage: "PL",
+        description: "Studio tworzące SaaS i strony internetowe. Minimalizm, wydajność, szybkie wdrożenia."
+      };
+      document.getElementById("schema-json").textContent = JSON.stringify(schema);
 
-    // year
-    document.getElementById("year").textContent = new Date().getFullYear();
+      // footer year
+      document.getElementById("footer-year").textContent = new Date().getFullYear();
 
-    // lucide icons
-    lucide.createIcons();
+      // Scroll progress
+      const progressBar = document.getElementById("scroll-progress");
+      const updateProgress = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const p = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = `${p}%`;
+      };
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      updateProgress();
 
-    // mobile menu
-    const menuBtn = document.getElementById("menuBtn");
-    const mobileMenu = document.getElementById("mobileMenu");
-    menuBtn?.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
-    });
-    mobileMenu?.querySelectorAll("a").forEach(a => a.addEventListener("click", () => mobileMenu.classList.add("hidden")));
+      // Mobile menu
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileNav = document.getElementById("mobile-nav");
+      const closeMobileNav = () => {
+        if (!mobileNav) return;
+        mobileNav.hidden = true;
+        menuBtn?.setAttribute("aria-expanded", "false");
+      };
+      const openMobileNav = () => {
+        if (!mobileNav) return;
+        mobileNav.hidden = false;
+        menuBtn?.setAttribute("aria-expanded", "true");
+      };
+      menuBtn?.addEventListener("click", () => {
+        const isOpen = !mobileNav.hidden;
+        isOpen ? closeMobileNav() : openMobileNav();
+      });
+      mobileNav?.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if (a) closeMobileNav();
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMobileNav();
+      });
 
-    // parallax hero
-    const heroText = document.getElementById("heroText");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY < window.innerHeight) heroText.style.transform = `translateY(${window.scrollY * 0.18}px)`;
-    }, { passive:true });
+      // Reveal animations
+      let observer;
+      const initScrollAnimations = () => {
+        if (observer) observer.disconnect();
+        observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
 
-    // scroll progress
-    const progressBar = document.getElementById("scroll-progress");
-    const updateProgress = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const p = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      progressBar.style.width = `${p}%`;
-    };
-    window.addEventListener("scroll", updateProgress, { passive:true });
-    updateProgress();
+        document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
+      };
 
-    // particles
-    const createParticles = () => {
-      const container = document.getElementById("particles");
-      if (!container) return;
-      container.innerHTML = "";
-      const ACCENT = "#ff0354";
-      for (let i = 0; i < 26; i++) {
-        const p = document.createElement("span");
-        const size = 22 + (i % 6) * 10;
-        p.className = "absolute rounded-full opacity-20 blur-2xl particle";
-        p.style.cssText = `
-          width:${size}px;height:${size}px;
-          background:${i % 3 ? ACCENT : "#4f46e5"};
-          left:${Math.random() * 100}%;
-          top:${Math.random() * 100}%;
-          animation-duration:${10 + (i % 6)}s;
-          animation-delay:${i * 0.18}s;
-        `;
-        container.appendChild(p);
-      }
-    };
-    createParticles();
-
-    // reveal on scroll
-    let observer;
-    const initScrollAnimations = () => {
-      if (observer) observer.disconnect();
-      observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) { e.target.classList.add("is-visible"); obs.unobserve(e.target); }
+      // Channel selector
+      let selectedChannel = "email";
+      const channelBtns = Array.from(document.querySelectorAll(".channel-btn"));
+      const paintChannels = () => {
+        channelBtns.forEach(btn => {
+          const isActive = btn.getAttribute("data-channel") === selectedChannel;
+          btn.style.borderColor = isActive ? "rgba(255,3,84,.55)" : "rgba(255,255,255,.12)";
+          btn.style.background = isActive ? "rgba(255,3,84,.12)" : "rgba(255,255,255,.06)";
+          btn.style.color = isActive ? "rgba(255,255,255,.92)" : "rgba(255,255,255,.82)";
+          btn.style.boxShadow = isActive ? "0 0 0 3px rgba(255,3,84,.12)" : "none";
         });
-      }, { threshold: 0.12 });
-      document.querySelectorAll(".animate-on-scroll").forEach(el => observer.observe(el));
-    };
-    initScrollAnimations();
+      };
+      channelBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          selectedChannel = btn.getAttribute("data-channel");
+          paintChannels();
+        });
+      });
+      paintChannels();
 
-    // demo form handler
-    window.VelorieDemoForm = {
-      submit: (ev) => {
-        ev.preventDefault();
-        const btn = ev.target.querySelector('button[type="submit"]');
-        if (btn) {
-          const old = btn.innerHTML;
-          btn.disabled = true;
-          btn.innerHTML = '<i data-lucide="check" class="h-4 w-4"></i><span>Wysłano (demo)</span>';
-          lucide.createIcons();
-          setTimeout(() => { btn.disabled = false; btn.innerHTML = old; lucide.createIcons(); ev.target.reset(); }, 1400);
+      // Contact form logic
+      const FORM = document.getElementById("contact-form");
+      const statusEl = document.getElementById("cf-status");
+      const submitBtn = document.getElementById("cf-submit");
+
+      const setStatus = (msg, tone = "normal") => {
+        const tones = {
+          normal: "rgba(255,255,255,.70)",
+          ok: "rgba(120,255,180,.85)",
+          warn: "rgba(255,210,120,.90)",
+          err: "rgba(255,120,120,.90)",
+        };
+        statusEl.style.color = tones[tone] || tones.normal;
+        statusEl.textContent = msg || "";
+      };
+
+      const validateEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(v||"").trim());
+
+      // TODO: Podmień na swój adres lub endpoint.
+      const MAIL_TO = "kontakt@velorie.design";
+
+      // Jeśli chcesz wysyłać na backend:
+      // const API_ENDPOINT = "/api/contact";
+      // i w submit zrób fetch POST.
+
+      FORM.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("cf-name").value.trim();
+        const email = document.getElementById("cf-email").value.trim();
+        const subject = document.getElementById("cf-subject").value.trim();
+        const message = document.getElementById("cf-message").value.trim();
+        const budget = document.getElementById("cf-budget").value.trim();
+        const deadline = document.getElementById("cf-deadline").value.trim();
+
+        if (!name || !subject || !message) {
+          setStatus("Uzupełnij wymagane pola.", "warn");
+          return;
         }
-        return false;
-      }
-    };
+        if (!validateEmail(email)) {
+          setStatus("Podaj poprawny adres e-mail.", "warn");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = "0.85";
+        setStatus("Przygotowuję wiadomość…", "normal");
+
+        try {
+          const body =
+`Imię/Nick: ${name}
+Email: ${email}
+Kanał kontaktu: ${selectedChannel}
+Budżet: ${budget || "-"}
+Termin: ${deadline || "-"}
+
+Wiadomość:
+${message}
+`;
+
+          // Minimalistycznie: mailto (działa bez backendu)
+          const mailto = `mailto:${encodeURIComponent(MAIL_TO)}?subject=${encodeURIComponent("[Velorie Design] " + subject)}&body=${encodeURIComponent(body)}`;
+          window.location.href = mailto;
+
+          setStatus("Otwieram klienta poczty…", "ok");
+        } catch (err) {
+          console.error(err);
+          setStatus("Coś poszło nie tak. Spróbuj ponownie.", "err");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = "1";
+        }
+      });
+
+      // Init
+      lucide.createIcons();
+      initScrollAnimations();
+    });
   </script>
 </body>
 </html>
