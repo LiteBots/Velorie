@@ -12,7 +12,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Tailwind config -->
   <script>
     tailwind.config = {
       theme: {
@@ -73,7 +72,6 @@
       color: rgba(255,255,255,.92);
     }
 
-    /* Background layers */
     .grid-bg{
       position: fixed; inset: 0;
       pointer-events: none;
@@ -128,7 +126,6 @@
       mix-blend-mode: overlay;
     }
 
-    /* Glass */
     .glass{
       background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
       border: 1px solid var(--stroke);
@@ -143,12 +140,10 @@
       -webkit-backdrop-filter: blur(14px);
     }
 
-    /* Hover/Press */
     .lift{ transition: transform .18s ease, filter .18s ease, background .18s ease, border-color .18s ease; }
     .lift:hover{ transform: translateY(-2px); }
     .lift:active{ transform: translateY(0px) scale(.99); }
 
-    /* Buttons */
     .btn-primary{
       background: linear-gradient(135deg, rgba(255,3,84,1), rgba(124,58,237,1));
       box-shadow: 0 12px 26px rgba(255,3,84,.18), 0 10px 32px rgba(124,58,237,.16);
@@ -160,7 +155,6 @@
     }
     .btn-ghost:hover{ background: rgba(255,255,255,.08); }
 
-    /* Progress bar */
     #scroll-progress{
       position: fixed;
       inset: 0 0 auto 0;
@@ -171,14 +165,12 @@
       box-shadow: 0 10px 30px rgba(255,3,84,.35);
     }
 
-    /* Inputs focus */
     .focus-ring:focus{
       outline: none;
       border-color: rgba(255,3,84,.55);
       box-shadow: 0 0 0 3px rgba(255,3,84,.18);
     }
 
-    /* Fancy outline */
     .ring-gradient{
       position: relative;
       border-radius: 24px;
@@ -189,13 +181,11 @@
       position:absolute; inset:-1px;
       background: linear-gradient(135deg, rgba(255,3,84,.55), rgba(124,58,237,.45), rgba(73,242,184,.25));
       opacity:.55;
-      filter: blur(0px);
       z-index:0;
       pointer-events:none;
     }
     .ring-gradient > *{ position: relative; z-index: 1; }
 
-    /* Shimmer for badges */
     .shimmer{
       position: relative;
       overflow: hidden;
@@ -217,11 +207,9 @@
       100% { transform: translateX(220%); opacity: .0; }
     }
 
-    /* Reveal */
     .reveal{ opacity: 0; transform: translateY(14px) scale(.99); transition: opacity .55s ease, transform .55s ease; }
     .reveal.is-visible{ opacity: 1; transform: translateY(0) scale(1); }
 
-    /* Skip link */
     .skip-link{
       position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
     }
@@ -231,7 +219,6 @@
       z-index: 80;
     }
 
-    /* Toast */
     #toast{
       position: fixed;
       bottom: calc(16px + env(safe-area-inset-bottom));
@@ -244,7 +231,6 @@
     #toast.show{ opacity: 1; }
     #toast .toast-inner{ pointer-events: auto; }
 
-    /* Back to top */
     #toTop{
       position: fixed;
       right: 14px;
@@ -256,7 +242,6 @@
     }
     #toTop.show{ opacity: 1; transform: translateY(0); }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior: auto; }
       .grid-bg, .blob{ animation: none !important; }
@@ -270,7 +255,6 @@
 <body class="selection:bg-[rgba(255,3,84,.40)] selection:text-white">
   <a class="skip-link" href="#content">Przejdź do treści</a>
 
-  <!-- Ambient -->
   <div class="aurora" aria-hidden="true">
     <div class="blob b1"></div>
     <div class="blob b2"></div>
@@ -279,7 +263,6 @@
   <div class="noise" aria-hidden="true"></div>
   <div id="scroll-progress" aria-hidden="true"></div>
 
-  <!-- TOAST -->
   <div id="toast" role="status" aria-live="polite">
     <div class="toast-inner glass rounded-2xl px-4 py-3 border border-white/10 shadow-soft flex items-center gap-3">
       <div class="h-9 w-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
@@ -295,7 +278,6 @@
     </div>
   </div>
 
-  <!-- HEADER -->
   <header class="sticky top-0 z-50 glass-soft">
     <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between gap-3">
       <a href="#top" class="flex items-center gap-3 min-w-0 group">
@@ -309,7 +291,6 @@
       <nav class="hidden md:flex items-center gap-2 text-sm">
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition" href="#uslugi">Usługi</a>
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition" href="#proces">Proces</a>
-        <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition" href="#prace">Prace</a>
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/70 hover:text-white transition" href="#faq">FAQ</a>
       </nav>
 
@@ -329,12 +310,10 @@
       </div>
     </div>
 
-    <!-- Mobile menu -->
     <div id="mobile-menu" class="md:hidden hidden border-t border-white/10">
       <div class="mx-auto max-w-7xl px-4 py-3 flex flex-col gap-1 text-sm">
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/75 hover:text-white transition" href="#uslugi">Usługi</a>
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/75 hover:text-white transition" href="#proces">Proces</a>
-        <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/75 hover:text-white transition" href="#prace">Prace</a>
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/75 hover:text-white transition" href="#faq">FAQ</a>
         <a class="px-3 py-2 rounded-xl hover:bg-white/5 text-white/75 hover:text-white transition" href="#kontakt">Kontakt</a>
       </div>
@@ -342,7 +321,6 @@
   </header>
 
   <main id="content" class="relative z-10">
-    <!-- HERO -->
     <section id="top" class="relative overflow-hidden">
       <div class="mx-auto max-w-7xl px-4 py-16 sm:py-20 md:py-28 grid lg:grid-cols-12 gap-10 items-start">
         <div class="lg:col-span-7 space-y-6">
@@ -404,7 +382,6 @@
           </div>
         </div>
 
-        <!-- Right card / mockup -->
         <div class="lg:col-span-5">
           <div class="glass rounded-[2rem] p-3 reveal">
             <div class="rounded-[1.5rem] border border-white/10 bg-black/55 p-4">
@@ -474,7 +451,6 @@
             </div>
           </div>
 
-          <!-- Mini scope modal trigger hint -->
           <div class="mt-4 grid grid-cols-2 gap-3 reveal">
             <div class="glass rounded-2xl p-4 lift">
               <div class="flex items-center gap-2">
@@ -495,7 +471,6 @@
       </div>
     </section>
 
-    <!-- LOGOS / TRUST -->
     <section class="py-10 sm:py-12">
       <div class="mx-auto max-w-7xl px-4">
         <div class="glass rounded-3xl p-5 sm:p-6 reveal">
@@ -523,7 +498,6 @@
       </div>
     </section>
 
-    <!-- SERVICES -->
     <section id="uslugi" class="relative py-14 sm:py-16">
       <div class="mx-auto max-w-7xl px-4">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
@@ -547,7 +521,6 @@
         </div>
 
         <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Card -->
           <div class="glass rounded-3xl p-6 lift reveal ring-gradient">
             <div class="h-11 w-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
               <i data-lucide="key-round" class="h-5 w-5 text-[var(--accent)]"></i>
@@ -629,7 +602,6 @@
       </div>
     </section>
 
-    <!-- PROCESS -->
     <section id="proces" class="relative py-14 sm:py-16">
       <div class="mx-auto max-w-7xl px-4">
         <div class="grid lg:grid-cols-12 gap-8 items-start">
@@ -725,77 +697,6 @@
       </div>
     </section>
 
-    <!-- WORK / PORTFOLIO (placeholder cards) -->
-    <section id="prace" class="relative py-14 sm:py-16">
-      <div class="mx-auto max-w-7xl px-4">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <div class="max-w-2xl">
-            <h2 class="text-3xl md:text-4xl font-black reveal">Prace</h2>
-            <p class="mt-2 text-white/70 reveal">
-              Poniżej przykładowe typy realizacji (podmień na swoje screeny / linki).
-            </p>
-          </div>
-          <div class="reveal">
-            <a href="#kontakt" class="inline-flex items-center gap-2 rounded-2xl btn-primary lift px-5 py-3 text-sm font-semibold">
-              <i data-lucide="plus" class="h-4 w-4"></i>
-              <span>Zróbmy podobne</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <a href="#kontakt" class="glass rounded-3xl p-5 lift reveal ring-gradient">
-            <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold">Panel administracyjny</div>
-              <span class="text-xs text-white/55">SaaS</span>
-            </div>
-            <div class="mt-3 h-36 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-black/40 flex items-center justify-center">
-              <i data-lucide="layout-dashboard" class="h-10 w-10 text-white/45"></i>
-            </div>
-            <div class="mt-3 text-sm text-white/65">Tabele, filtry, stany, autoryzacja, SSE/powiadomienia.</div>
-            <div class="mt-3 flex flex-wrap gap-2 text-xs text-white/70">
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">RBAC</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">Search</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">Logs</span>
-            </div>
-          </a>
-
-          <a href="#kontakt" class="glass rounded-3xl p-5 lift reveal ring-gradient">
-            <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold">Checkout + płatności</div>
-              <span class="text-xs text-white/55">E-commerce</span>
-            </div>
-            <div class="mt-3 h-36 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-black/40 flex items-center justify-center">
-              <i data-lucide="credit-card" class="h-10 w-10 text-white/45"></i>
-            </div>
-            <div class="mt-3 text-sm text-white/65">Webhooki, statusy zamówień, UX koszyka, błędy i retry.</div>
-            <div class="mt-3 flex flex-wrap gap-2 text-xs text-white/70">
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">PayU</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">SSE</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">Storage</span>
-            </div>
-          </a>
-
-          <a href="#kontakt" class="glass rounded-3xl p-5 lift reveal ring-gradient">
-            <div class="flex items-center justify-between">
-              <div class="text-sm font-semibold">Landing premium</div>
-              <span class="text-xs text-white/55">WWW</span>
-            </div>
-            <div class="mt-3 h-36 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-black/40 flex items-center justify-center">
-              <i data-lucide="sparkles" class="h-10 w-10 text-white/45"></i>
-            </div>
-            <div class="mt-3 text-sm text-white/65">Sekcje, animacje, micro-UX, formularz, SEO basics.</div>
-            <div class="mt-3 flex flex-wrap gap-2 text-xs text-white/70">
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">Performance</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">A11y</span>
-              <span class="px-2.5 py-1 rounded-full bg-black/30 border border-white/10">Forms</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ -->
     <section id="faq" class="relative py-14 sm:py-16">
       <div class="mx-auto max-w-7xl px-4">
         <div class="grid lg:grid-cols-12 gap-8 items-start">
@@ -865,7 +766,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="kontakt" class="relative py-14 sm:py-16">
       <div class="mx-auto max-w-7xl px-4">
         <div class="grid lg:grid-cols-12 gap-8 items-start">
@@ -928,17 +828,13 @@
                 </span>
               </div>
 
-              <!-- Tabs: mailto / api -->
               <div class="mt-5 flex flex-wrap gap-2">
                 <button id="mode-mailto" class="mode-btn inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold btn-primary lift">
                   <i data-lucide="mail" class="h-4 w-4"></i> Mailto
                 </button>
                 <button id="mode-api" class="mode-btn inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-semibold btn-ghost lift text-white">
-                  <i data-lucide="link" class="h-4 w-4"></i> API (opcjonalne)
+                  <i data-lucide="link" class="h-4 w-4"></i> API
                 </button>
-                <div class="text-xs text-white/55 self-center">
-                  API działa po ustawieniu endpointu w kodzie.
-                </div>
               </div>
 
               <form id="contact-form" class="mt-6 grid gap-4" autocomplete="off">
@@ -998,10 +894,6 @@
 
                 <div id="cf-status" class="text-sm text-white/70 min-h-[20px]"></div>
               </form>
-
-              <div class="mt-4 text-xs text-white/55">
-                Tip: możesz wkleić link do Figmy / repo / dokumentu — przyspiesza wycenę.
-              </div>
             </div>
           </div>
         </div>
@@ -1027,12 +919,10 @@
     </div>
   </footer>
 
-  <!-- Back to top -->
   <button id="toTop" class="rounded-2xl btn-primary lift px-3 py-3 shadow-soft" aria-label="Wróć na górę">
     <i data-lucide="arrow-up" class="h-5 w-5"></i>
   </button>
 
-  <!-- SCOPE MODAL -->
   <div id="scope-modal" class="fixed inset-0 z-[90] hidden">
     <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
     <div class="relative mx-auto max-w-3xl px-4 py-10">
@@ -1094,13 +984,10 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Lucide
       lucide.createIcons();
 
-      // Footer year
       document.getElementById("footer-year").textContent = new Date().getFullYear();
 
-      // Progress bar
       const progressBar = document.getElementById("scroll-progress");
       const updateProgress = () => {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -1111,7 +998,6 @@
       window.addEventListener("scroll", updateProgress, { passive: true });
       updateProgress();
 
-      // Mobile menu
       const mobileBtn = document.getElementById("mobile-menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
       const setMobileExpanded = (v) => {
@@ -1124,7 +1010,6 @@
       });
       mobileMenu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMobileExpanded(false)));
 
-      // Reveal on scroll
       const revealEls = Array.from(document.querySelectorAll(".reveal"));
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
@@ -1133,7 +1018,6 @@
       }, { threshold: 0.12, rootMargin: "0px 0px -10% 0px" });
       revealEls.forEach(el => io.observe(el));
 
-      // Toast
       const toast = document.getElementById("toast");
       const toastTitle = document.getElementById("toast-title");
       const toastMsg = document.getElementById("toast-msg");
@@ -1143,7 +1027,6 @@
       const showToast = (title, msg, tone="ok") => {
         toastTitle.textContent = title || "Gotowe";
         toastMsg.textContent = msg || "";
-        // tone tweaks
         toast.querySelector("i[data-lucide]").setAttribute("data-lucide", tone === "err" ? "alert-triangle" : "sparkles");
         lucide.createIcons();
         toast.classList.add("show");
@@ -1153,14 +1036,12 @@
       };
       toastClose.addEventListener("click", () => toast.classList.remove("show"));
 
-      // Clipboard helper
       const copyText = async (text) => {
         try {
           await navigator.clipboard.writeText(text);
           showToast("Skopiowano", "Gotowe — wklej w wiadomości.", "ok");
           return true;
         } catch (e) {
-          // fallback
           try {
             const ta = document.createElement("textarea");
             ta.value = text;
@@ -1180,19 +1061,16 @@
         }
       };
 
-      // Copy email buttons
       const EMAIL = "kontakt@velorie.design";
       document.getElementById("copy-email").addEventListener("click", () => copyText(EMAIL));
       document.getElementById("copy-email-2").addEventListener("click", () => copyText(EMAIL));
 
-      // Quick contact button: scroll + focus
       document.getElementById("btn-quick").addEventListener("click", () => {
         const el = document.getElementById("kontakt");
         el.scrollIntoView({ behavior: "smooth", block: "start" });
         setTimeout(() => document.getElementById("cf-name").focus({ preventScroll: true }), 450);
       });
 
-      // Back to top
       const toTop = document.getElementById("toTop");
       const updateToTop = () => {
         const show = (window.scrollY || 0) > 700;
@@ -1202,7 +1080,6 @@
       updateToTop();
       toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-      // Scope modal
       const modal = document.getElementById("scope-modal");
       const openModal = () => { modal.classList.remove("hidden"); document.body.style.overflow = "hidden"; };
       const closeModal = () => { modal.classList.add("hidden"); document.body.style.overflow = ""; };
@@ -1212,7 +1089,6 @@
       modal.querySelector(".absolute.inset-0").addEventListener("click", closeModal);
       window.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal(); });
 
-      // Brief template
       const briefTemplate = () => (
 `BRIEF — Velorie Design
 1) Typ projektu: (SaaS / Strona / Audyt / Inne)
@@ -1229,7 +1105,6 @@
       document.getElementById("scope-copy-brief").addEventListener("click", () => copyText(briefTemplate()));
       document.getElementById("scope-go-contact").addEventListener("click", () => { closeModal(); });
 
-      // Contact form (mailto / API)
       const FORM = document.getElementById("contact-form");
       const statusEl = document.getElementById("cf-status");
       const submitBtn = document.getElementById("cf-submit");
@@ -1251,11 +1126,10 @@
 
       const validateEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(v||"").trim());
 
-      // Modes
       const MODE = { MAILTO: "mailto", API: "api" };
       let currentMode = MODE.MAILTO;
 
-      const API_ENDPOINT = ""; // <- np. "https://twojadomena.pl/api/contact" (POST JSON)
+      let API_ENDPOINT = "";
       const applyMode = (mode) => {
         currentMode = mode;
         const isMailto = mode === MODE.MAILTO;
@@ -1264,13 +1138,8 @@
         modeApi.classList.toggle("btn-primary", !isMailto);
         modeApi.classList.toggle("btn-ghost", isMailto);
 
-        modeMailto.classList.toggle("text-white", true);
-        modeApi.classList.toggle("text-white", true);
-
-        submitLabel.textContent = isMailto ? "Wyślij" : "Wyślij (API)";
-        modeHint.textContent = isMailto
-          ? "Wysyłka przez e-mail (mailto)."
-          : "Wysyłka przez API (POST JSON). Ustaw endpoint w kodzie.";
+        submitLabel.textContent = isMailto ? "Wyślij" : "Wyślij";
+        modeHint.textContent = isMailto ? "Wysyłka przez e-mail (mailto)." : "Wysyłka przez API.";
       };
       modeMailto.addEventListener("click", () => applyMode(MODE.MAILTO));
       modeApi.addEventListener("click", () => applyMode(MODE.API));
@@ -1323,12 +1192,7 @@ ${message}
             setStatus("Otwieram klienta poczty…", "ok");
             showToast("Gotowe", "Otwieram klienta poczty…", "ok");
           } else {
-            if (!API_ENDPOINT) {
-              setStatus("Brak endpointu API. Ustaw API_ENDPOINT w kodzie lub użyj mailto.", "warn");
-              showToast("Brak API", "Ustaw API_ENDPOINT w kodzie.", "err");
-              return;
-            }
-            setStatus("Wysyłam przez API…", "normal");
+            setStatus("Wysyłam…", "normal");
 
             const res = await fetch(API_ENDPOINT, {
               method: "POST",
@@ -1355,7 +1219,6 @@ ${message}
         }
       });
 
-      // Extra: close mobile menu on resize to desktop
       window.addEventListener("resize", () => {
         if (window.matchMedia("(min-width: 768px)").matches) setMobileExpanded(false);
       }, { passive: true });
