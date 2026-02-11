@@ -1,0 +1,17 @@
+{
+  "name": "velorie-ticket-system",
+  "version": "1.0.0",
+  "description": "System ticketów i transkrypcji Velorie Market",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.7"
+  }
+}
