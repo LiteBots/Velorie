@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>Transkrypcja zgłoszenia #{{TICKET_ID}} – Velorie Market</title>
+  <meta name="description" content="Archiwum rozmowy ze zgłoszenia na serwerze Velorie." />
+  <meta name="theme-color" content="#0a1030" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --accent: #ff0354;
+      --accent2: #7c3aed;
+      --bg1: #00010f;
+      --bg2: #0a1030;
+      --stroke: rgba(255, 255, 255, .12);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(124, 58, 237, .18), transparent 60%),
+        radial-gradient(900px 600px at 85% 15%, rgba(255, 3, 84, .16), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height: 100svh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* grid */
+    .grid-bg {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      opacity: .22;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, .95) 0%, rgba(0, 0, 0, .20) 55%, transparent 75%);
+      transform: translateZ(0);
+      animation: gridFloat 12s ease-in-out infinite;
+      z-index: -2;
+    }
+    @keyframes gridFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(0, -10px, 0) scale(1.02); }
+    }
+
+    /* aurora blobs */
+    .aurora {
+      position: fixed; inset: -20%;
+      pointer-events: none;
+      filter: blur(46px) saturate(125%);
+      opacity: .90;
+      transform: translateZ(0);
+      z-index: -3;
+    }
+    .blob {
+      position: absolute;
+      width: clamp(320px, 40vw, 560px);
+      height: clamp(320px, 40vw, 560px);
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255, 3, 84, .35), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(124, 58, 237, .35), transparent 60%);
+      animation: blob 14s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .blob.b1 { left: 8%; top: 8%; }
+    .blob.b2 {
+      width: clamp(360px, 48vw, 680px);
+      height: clamp(360px, 48vw, 680px);
+      left: 62%; top: 18%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(124, 58, 237, .38), transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(255, 3, 84, .28), transparent 60%);
+      animation-duration: 18s;
+      animation-delay: -3s;
+    }
+    @keyframes blob {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      30% { transform: translate(40px, 18px) scale(1.08); }
+      60% { transform: translate(-28px, 34px) scale(0.98); }
+    }
+
+    /* noise overlay */
+    .noise {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      opacity: .09;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+      z-index: -1;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 999px; }
+    ::-webkit-scrollbar-track { background: rgba(255, 255, 255, .08); }
+
+    /* glass */
+    .glass {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .05));
+      border: 1px solid var(--stroke);
+      box-shadow:
+        0 18px 60px rgba(0, 0, 0, .50),
+        inset 0 1px 0 rgba(255, 255, 255, .10);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .glass-soft {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .glass, .glass-soft { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    }
+
+    .lift { transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, filter .2s ease; }
+    .lift:hover { transform: translateY(-2px); }
+
+    /* buttons */
+    .btn-ghost {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .12);
+    }
+    .btn-ghost:hover { background: rgba(255, 255, 255, .08); }
+
+    /* logo polish */
+    .brand-logo {
+      height: 40px;
+      width: auto;
+      max-width: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 22px rgba(255, 3, 84, .12));
+    }
+
+    /* chat specific */
+    .message-group + .message-group {
+      margin-top: 1.5rem;
+    }
+    .message-bubble {
+      word-break: break-word;
+    }
+  </style>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: {
+            glow: "0 10px 40px rgba(255,3,84,0.45)",
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="text-white/90 selection:bg-[#ff0354]/40 selection:text-white">
+
+  <div class="aurora" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="sticky top-0 z-40 glass-soft">
+    <div class="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between gap-3">
+      <a href="https://velorie.pl" class="flex items-center gap-3 min-w-0">
+        <img src="https://i.imgur.com/NDhlWyz.png" alt="Velorie" class="brand-logo" />
+        <div class="leading-tight min-w-0">
+          <div class="text-base sm:text-lg font-semibold tracking-tight truncate">Velorie Market</div>
+          <div class="text-[11px] sm:text-xs text-white/60 truncate">Transkrypcja zgłoszenia</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <a href="https://velorie.pl" class="inline-flex items-center gap-2 rounded-xl btn-ghost lift px-4 py-2 text-sm font-medium text-white">
+          <i data-lucide="arrow-left" class="h-4 w-4"></i>
+          <span class="hidden sm:inline">Strona główna</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 flex-grow py-8 sm:py-12">
+    <div class="mx-auto max-w-5xl px-4">
+      
+      <div class="glass rounded-t-3xl p-6 sm:p-8 border-b-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight">{{TOPIC}}</h1>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-red-500/15 border border-red-500/20 text-red-400 px-3 py-1 text-xs font-semibold">
+              <i data-lucide="lock" class="h-3 w-3"></i>
+              Zamknięte
+            </span>
+          </div>
+          <p class="text-white/60 text-sm">
+            Właściciel: <span class="font-medium text-white/90">{{CREATOR_NAME}}</span> • Otwarto: {{CREATED_AT}}
+          </p>
+        </div>
+        
+        <div class="flex items-center gap-3 text-sm text-white/70">
+          <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 transition lift">
+            <i data-lucide="printer" class="h-4 w-4"></i>
+            Drukuj
+          </button>
+        </div>
+      </div>
+
+      <div class="glass rounded-b-3xl p-4 sm:p-8 bg-black/20">
+        
+        <div class="flex items-center justify-center mb-8">
+          <div class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs text-white/50 flex items-center gap-2">
+            <i data-lucide="ticket" class="h-3.5 w-3.5"></i>
+            Zgłoszenie utworzone przez {{CREATOR_NAME}}
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          
+          {{MESSAGES_HTML}}
+
+        </div>
+
+        <div class="mt-8 flex flex-col items-center justify-center gap-2 border-t border-white/10 pt-8">
+          <div class="h-10 w-10 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center ring-1 ring-red-500/30">
+            <i data-lucide="lock" class="h-5 w-5"></i>
+          </div>
+          <div class="text-sm text-white/60 text-center">
+            Zgłoszenie zostało zamknięte przez <span class="text-white/80 font-medium">{{CLOSED_BY_NAME}}</span><br>
+            <span class="text-xs">{{CLOSED_AT}}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="relative mt-auto border-t border-white/10 glass-soft">
+    <div class="mx-auto max-w-5xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2 text-white/50 text-xs">
+        <i data-lucide="shield" class="h-4 w-4"></i>
+        <span>Wygenerowano automatycznie z systemu zgłoszeń Velorie Market.</span>
+      </div>
+      <div class="text-xs text-white/40">
+        © {{CURRENT_YEAR}} Velorie Market
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Inicjalizacja ikon Lucide
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
